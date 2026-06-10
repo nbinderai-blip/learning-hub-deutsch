@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Deutsch">
+<meta name="theme-color" content="#4F46E5">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>🇩🇪 Deutsch für Rumänen</title>
+<style>
+:root {
+  --p:#4F46E5;--pd:#3730A3;--s:#7C3AED;
+  --ok:#10B981;--err:#EF4444;--warn:#F59E0B;
+  --bg:#EEF0FF;--card:#fff;--txt:#1F2937;--txt2:#6B7280;
+  --bdr:#E5E7EB;--r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{min-height:100vh;overflow-x:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--txt);}
+.screen{display:none;animation:fadeIn .25s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cardIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes cardBack{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+@keyframes pop{0%{transform:scale(.8);opacity:0}80%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes slideUp{from{transform:translateX(-50%) translateY(100px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+.mw{max-width:480px;margin:0 auto;}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--p) 0%,var(--s) 100%);color:#fff;padding:22px 16px 28px;text-align:center;position:relative;overflow:hidden;}
+.hdr::after{content:'';position:absolute;bottom:-20px;left:-10%;width:120%;height:40px;background:var(--bg);border-radius:50% 50% 0 0;}
+.hdr h1{font-size:26px;font-weight:900;letter-spacing:-.5px;}
+.hdr p{font-size:13px;opacity:.85;margin:4px 0 14px;}
+.stats-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
+.pill{background:rgba(255,255,255,.22);backdrop-filter:blur(8px);border-radius:99px;padding:6px 13px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:5px;}
+
+/* STREAK BAR */
+.streak-box{background:linear-gradient(135deg,#F97316,#EF4444);color:#fff;margin:18px 16px 6px;border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 14px rgba(239,68,68,.25);}
+.streak-fire{font-size:30px;flex-shrink:0;}
+.streak-num{font-size:21px;font-weight:900;line-height:1;}
+.streak-sub{font-size:12px;opacity:.88;}
+.motivate{font-size:13px;font-style:italic;color:var(--txt2);text-align:center;padding:6px 16px 0;}
+
+/* PROGRESS */
+.prog-box{background:var(--card);margin:14px 16px 6px;border-radius:var(--r);padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.prog-lbl{display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--txt2);margin-bottom:8px;}
+.prog-bar{background:#E5E7EB;border-radius:99px;height:10px;overflow:hidden;}
+.prog-fill{background:linear-gradient(90deg,var(--p),var(--s));height:100%;border-radius:99px;transition:width .6s ease;}
+
+/* LESSON LIST */
+.lessons-wrap{padding:10px 16px 32px;}
+.sec-title{font-size:14px;font-weight:800;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.lcard{background:var(--card);border-radius:var(--r);padding:13px 13px 13px 15px;margin-bottom:9px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;gap:11px;cursor:pointer;transition:transform .12s,box-shadow .12s;border:2.5px solid transparent;position:relative;overflow:hidden;}
+.lcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:2px 0 0 2px;}
+.lcard:active{transform:scale(.975);box-shadow:0 1px 4px rgba(0,0,0,.08);}
+.lcard.done{border-color:var(--ok);}
+.lcard.done::before{background:var(--ok);}
+.lcard.cur{border-color:var(--p);}
+.lcard.cur::before{background:var(--p);}
+.lcard.locked{opacity:.42;cursor:not-allowed;}
+.lcard.math-card::before{background:#3B82F6;}
+.lcard.fs-card::before{background:#D97706;}
+.l-ico{font-size:33px;width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.l-info{flex:1;min-width:0;}
+.l-title{font-size:15px;font-weight:700;}
+.l-sub{font-size:12px;color:var(--txt2);margin-top:2px;}
+.l-meta{display:flex;align-items:center;gap:5px;margin-top:5px;flex-wrap:wrap;}
+.badge{background:var(--bg);border-radius:99px;padding:2px 8px;font-size:11px;font-weight:600;color:var(--txt2);}
+.badge.a1{background:#D1FAE5;color:#065F46;}
+.badge.a2{background:#DBEAFE;color:#1E40AF;}
+.badge.math{background:#EDE9FE;color:#5B21B6;}
+.badge.b1{background:#FEF3C7;color:#92400E;}
+.stars{font-size:13px;letter-spacing:1px;}
+.l-status{font-size:21px;flex-shrink:0;}
+
+/* VOCAB HEADER */
+.v-hdr{color:#fff;padding:13px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10;}
+.back-btn{background:rgba(255,255,255,.22);border:none;color:#fff;width:37px;height:37px;border-radius:10px;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s;}
+.back-btn:active{background:rgba(255,255,255,.4);}
+.v-hdr-info{flex:1;}
+.v-hdr-title{font-size:16px;font-weight:800;}
+.v-hdr-sub{font-size:11px;opacity:.8;margin-top:2px;}
+.cnt-pill{background:rgba(255,255,255,.22);border-radius:99px;padding:4px 11px;font-size:13px;font-weight:700;}
+
+/* VOCAB CARD */
+.vc-wrap{padding:16px 16px 24px;}
+.vc-prog{background:#E5E7EB;border-radius:99px;height:6px;margin-bottom:18px;overflow:hidden;}
+.vc-prog-fill{background:linear-gradient(90deg,var(--p),var(--s));height:100%;transition:width .3s ease;}
+.vc-card{background:var(--card);border-radius:22px;padding:28px 22px;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.13);display:flex;flex-direction:column;align-items:center;gap:10px;}
+.vc-card.anim-fwd{animation:cardIn .28s ease;}
+.vc-card.anim-bwd{animation:cardBack .28s ease;}
+.vc-emoji{font-size:70px;line-height:1;animation:pop .4s ease;}
+.vc-de{font-size:32px;font-weight:900;color:var(--p);letter-spacing:-.5px;line-height:1.1;}
+.vc-ro{font-size:19px;color:var(--txt);font-weight:600;}
+.speak-btn{background:linear-gradient(135deg,var(--p),var(--s));color:#fff;border:none;border-radius:11px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .15s,transform .12s;margin-top:2px;}
+.speak-btn:active{opacity:.8;transform:scale(.96);}
+
+/* TIP & EXAMPLE */
+.tip-box{background:#FEF3C7;border-left:3px solid #F59E0B;border-radius:10px;padding:9px 13px;font-size:12.5px;color:#92400E;margin-top:6px;width:100%;text-align:left;line-height:1.4;}
+.eg-box{background:#EFF6FF;border-left:3px solid #3B82F6;border-radius:10px;padding:9px 13px;font-size:12.5px;color:#1E40AF;margin-top:5px;width:100%;text-align:left;line-height:1.5;}
+.eg-de{font-weight:700;display:block;}
+.eg-ro{opacity:.8;font-style:italic;display:block;margin-top:2px;}
+
+/* CONFIDENCE */
+.conf-label{font-size:11.5px;font-weight:700;color:var(--txt2);margin-top:12px;text-align:center;text-transform:uppercase;letter-spacing:.4px;}
+.conf-row{display:flex;gap:7px;margin-top:5px;width:100%;}
+.conf-btn{flex:1;border:2px solid var(--bdr);background:var(--card);border-radius:10px;padding:8px 4px;font-size:12px;font-weight:700;cursor:pointer;transition:all .12s;text-align:center;line-height:1.3;}
+.conf-btn:active{transform:scale(.95);}
+.conf-btn.active-red{background:#FEE2E2;border-color:var(--err);color:#991B1B;}
+.conf-btn.active-yel{background:#FEF3C7;border-color:#D97706;color:#92400E;}
+.conf-btn.active-grn{background:#D1FAE5;border-color:var(--ok);color:#065F46;}
+
+/* NAV BUTTONS */
+.vc-nav{display:flex;gap:10px;margin-top:16px;}
+.nav-btn{background:var(--card);border:2px solid var(--bdr);color:var(--txt);border-radius:13px;padding:13px 0;font-size:15px;font-weight:700;cursor:pointer;flex:1;text-align:center;transition:all .12s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.nav-btn.pri{background:linear-gradient(135deg,var(--p),var(--s));border-color:transparent;color:#fff;}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed;}
+.nav-btn:not(:disabled):active{transform:scale(.97);}
+.quiz-go-btn{background:linear-gradient(135deg,var(--ok),#059669);color:#fff;border:none;border-radius:15px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;width:100%;margin-top:13px;transition:opacity .15s,transform .12s;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 15px rgba(16,185,129,.35);}
+.quiz-go-btn:active{opacity:.85;transform:scale(.98);}
+
+/* QUIZ HEADER */
+.q-hdr{background:linear-gradient(135deg,#F59E0B,#EF4444);color:#fff;padding:13px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10;}
+.q-prog-bar{flex:1;background:rgba(255,255,255,.3);border-radius:99px;height:8px;overflow:hidden;}
+.q-prog-fill{background:#fff;height:100%;transition:width .3s ease;border-radius:99px;}
+.q-hdr.math-hdr{background:linear-gradient(135deg,#3B82F6,#8B5CF6);}
+.q-hdr.fs-hdr{background:linear-gradient(135deg,#D97706,#DC2626);}
+
+/* QUIZ CONTENT */
+.q-wrap{padding:16px 16px 28px;}
+.q-card{background:var(--card);border-radius:20px;padding:20px 16px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.09);margin-bottom:16px;}
+.q-num{font-size:11px;font-weight:700;color:var(--txt2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+.q-emoji{font-size:50px;margin-bottom:4px;}
+.q-text{font-size:22px;font-weight:900;color:var(--p);line-height:1.2;}
+.q-text.math-q{font-size:20px;color:#1E40AF;white-space:pre-line;}
+.q-hint{font-size:12px;color:var(--txt2);margin-top:5px;font-style:italic;}
+.math-hint{background:#F3F4F6;border-radius:8px;padding:6px 12px;font-size:14px;color:var(--txt2);font-family:monospace;margin-top:8px;font-weight:700;}
+.q-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.q-opt{background:var(--card);border:2.5px solid var(--bdr);border-radius:13px;padding:15px 10px;font-size:14px;font-weight:600;cursor:pointer;text-align:center;transition:all .12s;color:var(--txt);min-height:60px;display:flex;align-items:center;justify-content:center;word-break:break-word;hyphens:auto;line-height:1.3;}
+.q-opt:active:not(.dis){transform:scale(.97);}
+.q-opt:not(.dis):hover{border-color:var(--p);background:#EEF0FF;}
+.q-opt.ok{background:#D1FAE5;border-color:var(--ok);color:#065F46;animation:pop .3s ease;}
+.q-opt.err{background:#FEE2E2;border-color:var(--err);color:#991B1B;}
+.q-opt.dis{pointer-events:none;}
+.q-fb{border-radius:12px;padding:12px;font-weight:700;font-size:14px;text-align:center;display:none;margin-top:10px;line-height:1.4;}
+.q-fb.on{display:block;animation:pop .25s ease;}
+.q-fb.ok{background:#D1FAE5;color:#065F46;}
+.q-fb.err{background:#FEE2E2;color:#991B1B;}
+.q-next{background:linear-gradient(135deg,var(--p),var(--s));color:#fff;border:none;border-radius:13px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;width:100%;margin-top:10px;display:none;transition:opacity .15s;box-shadow:0 3px 12px rgba(79,70,229,.3);}
+.q-next.on{display:block;animation:fadeIn .2s ease;}
+.q-next:active{opacity:.85;}
+.q-next.math-next{background:linear-gradient(135deg,#3B82F6,#8B5CF6);}
+.q-next.fs-next{background:linear-gradient(135deg,#D97706,#DC2626);}
+
+/* RESULTS */
+.res-wrap{min-height:100vh;background:linear-gradient(160deg,var(--p) 0%,var(--s) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;text-align:center;color:#fff;}
+.res-trophy{font-size:80px;animation:bounce .7s ease;margin-bottom:10px;}
+.res-title{font-size:28px;font-weight:900;margin-bottom:5px;}
+.res-sub{font-size:14px;opacity:.85;margin-bottom:20px;}
+.res-score-card{background:rgba(255,255,255,.2);backdrop-filter:blur(12px);border-radius:22px;padding:22px 30px;width:100%;max-width:300px;margin-bottom:16px;}
+.res-big{font-size:56px;font-weight:900;line-height:1;}
+.res-lbl{font-size:13px;opacity:.75;margin-top:4px;}
+.res-stars{font-size:36px;margin:10px 0 4px;letter-spacing:3px;}
+.xp-pill{background:rgba(255,255,255,.2);border-radius:99px;padding:8px 20px;font-size:15px;font-weight:800;margin-bottom:20px;display:inline-block;}
+.res-btns{display:flex;flex-direction:column;gap:9px;width:100%;max-width:300px;}
+.res-btn{background:rgba(255,255,255,.95);color:var(--p);border:none;border-radius:13px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;transition:all .12s;}
+.res-btn:active{opacity:.85;transform:scale(.98);}
+.res-btn.sec{background:rgba(255,255,255,.18);color:#fff;border:2px solid rgba(255,255,255,.35);}
+
+/* TOAST */
+.toast{position:fixed;top:18px;left:50%;z-index:9999;transform:translateX(-50%) translateY(-90px);background:#1F2937;color:#fff;padding:11px 18px;border-radius:12px;font-size:14px;font-weight:600;transition:transform .3s ease;max-width:88%;text-align:center;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.3);}
+.toast.on{transform:translateX(-50%) translateY(0);}
+
+/* ACHIEVEMENT POPUP */
+.ach-popup{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(130px);background:#1F2937;color:#fff;border-radius:18px;padding:16px 24px;font-size:15px;font-weight:700;text-align:center;z-index:9998;transition:transform .45s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 30px rgba(0,0,0,.35);max-width:90%;}
+.ach-popup.on{transform:translateX(-50%) translateY(0);}
+.ach-popup .ach-sub{font-size:12px;opacity:.7;margin-top:3px;font-weight:400;}
+
+/* MATH BADGE ACCENT */
+.math-accent{border:2.5px solid #3B82F6;}
+
+/* ZEIT CARD */
+.zeit-card{background:var(--card);margin:8px 16px 6px;border-radius:var(--r);padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.sect-hdr{font-size:11px;font-weight:800;color:var(--txt2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:5px;}
+.zeit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.zeit-stat{background:var(--bg);border-radius:11px;padding:10px 5px;text-align:center;}
+.zeit-val{font-size:16px;font-weight:900;color:var(--p);line-height:1;}
+.zeit-lbl{font-size:10px;color:var(--txt2);font-weight:700;margin-top:3px;text-transform:uppercase;}
+
+/* AMPEL CARD */
+.ampel-card{background:var(--card);margin:8px 16px 6px;border-radius:var(--r);padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.ampel-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bdr);}
+.ampel-row:last-of-type{border-bottom:none;}
+.ampel-light{width:13px;height:13px;border-radius:50%;flex-shrink:0;}
+.l-grn{background:var(--ok);box-shadow:0 0 7px rgba(16,185,129,.55);}
+.l-yel{background:var(--warn);box-shadow:0 0 7px rgba(245,158,11,.5);}
+.l-red{background:var(--err);box-shadow:0 0 7px rgba(239,68,68,.45);}
+.l-off{background:#D1D5DB;}
+.ampel-name{font-size:13px;font-weight:700;flex:1;}
+.ampel-msg{font-size:11px;color:var(--txt2);}
+.ampel-next{background:#EEF0FF;border-radius:10px;padding:8px 12px;margin-top:10px;font-size:12.5px;font-weight:600;color:var(--p);display:flex;align-items:center;gap:6px;}
+
+/* SCHULKLASSE CARD */
+.klasse-card{background:linear-gradient(135deg,#1E40AF,#4F46E5);color:#fff;margin:10px 16px 6px;border-radius:var(--r);padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 16px rgba(79,70,229,.3);}
+.klasse-ico{font-size:34px;flex-shrink:0;}
+.klasse-info{flex:1;min-width:0;}
+.klasse-name{font-size:18px;font-weight:900;line-height:1.1;}
+.klasse-ro{font-size:11.5px;opacity:.82;margin-top:3px;}
+.klasse-next{font-size:11px;opacity:.7;margin-top:4px;font-style:italic;}
+.klasse-badge{background:rgba(255,255,255,.22);border-radius:11px;padding:7px 11px;font-size:15px;font-weight:900;white-space:nowrap;flex-shrink:0;text-align:center;line-height:1.3;}
+.klasse-badge small{font-size:10px;opacity:.75;display:block;font-weight:600;}
+
+/* READINESS PILL on lesson card */
+.r-pill{border-radius:99px;padding:2px 7px;font-size:10px;font-weight:700;}
+.r-grn{background:#D1FAE5;color:#065F46;}
+.r-yel{background:#FEF3C7;color:#92400E;}
+.r-red{background:#FEE2E2;color:#991B1B;}
+
+@media(min-width:480px){.hdr{padding:28px 24px 32px;}.hdr h1{font-size:30px;}.vc-de{font-size:36px;}}
+
+/* ════════════════════════════════════════════════════
+   ONBOARDING & ADMIN
+   ════════════════════════════════════════════════════ */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(5px);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+.overlay.on{opacity:1;pointer-events:all;}
+.modal{background:var(--card);border-radius:24px;padding:28px 20px;max-width:400px;width:100%;box-shadow:var(--sh-lg);animation:pop .35s ease;}
+.modal h2{font-size:22px;font-weight:900;color:var(--ink);margin-bottom:4px;}
+.modal p{font-size:13.5px;color:var(--ink2);margin-bottom:18px;line-height:1.5;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:12px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.form-group input,.form-group input[type=date]{width:100%;padding:12px 13px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface2);color:var(--ink);font-size:15px;font-family:inherit;transition:border-color .15s;outline:none;}
+.form-group input:focus,.form-group input[type=date]:focus{border-color:var(--acc);}
+.form-group input::placeholder{color:var(--ink3);}
+.form-btns{display:flex;gap:10px;margin-top:22px;}
+.form-btn{flex:1;padding:13px;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .12s;}
+.form-btn.pri{background:var(--acc);color:#fff;box-shadow:0 4px 12px rgba(94,106,210,.3);}
+.form-btn.pri:active{opacity:.85;transform:scale(.97);}
+.form-btn.sec{background:var(--line);color:var(--ink);}
+.form-btn.sec:active{opacity:.75;}
+
+.admin-panel{position:fixed;bottom:100px;right:16px;width:280px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--sh-lg);z-index:8500;display:none;}
+.admin-panel.on{display:block;animation:slideUp .3s ease;}
+.admin-title{font-size:12px;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+.admin-btn{width:100%;background:var(--surface2);border:none;color:var(--ink);padding:8px 12px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;margin-bottom:6px;transition:all .12s;text-align:left;}
+.admin-btn:hover{background:var(--acc-tint);color:var(--acc);}
+.admin-btn:last-child{margin-bottom:0;}
+
+/* ════════════════════════════════════════════════════
+   COACH-ANIMATION (Success Reactions)
+   ════════════════════════════════════════════════════ */
+.coach-box{position:fixed;bottom:120px;left:50%;transform:translateX(-50%);z-index:8000;text-align:center;pointer-events:none;}
+.coach-emoji{font-size:80px;line-height:1;margin-bottom:10px;animation:coachBounce .6s ease;}
+.coach-text{background:var(--card);color:var(--ink);padding:12px 20px;border-radius:16px;font-size:14px;font-weight:700;border:2px solid var(--acc);box-shadow:var(--sh-md);animation:coachSlideUp .5s ease;max-width:280px;}
+.coach-text small{display:block;font-size:12px;color:var(--ink2);margin-top:2px;font-weight:400;}
+
+@keyframes coachBounce{0%{transform:scale(0) rotateZ(-20deg);opacity:0}60%{transform:scale(1.1) rotateZ(0)}100%{transform:scale(1) rotateZ(0);opacity:1}}
+@keyframes coachSlideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes coachThumbsUp{0%{transform:rotateZ(-15deg)}50%{transform:rotateZ(8deg)}100%{transform:rotateZ(-10deg)}}
+@keyframes coachClap{0%{transform:scaleX(1) scaleY(1)}25%{transform:scaleX(.92) scaleY(1.08)}50%{transform:scaleX(.95) scaleY(1.05)}75%{transform:scaleX(.92) scaleY(1.08)}100%{transform:scaleX(1) scaleY(1)}}
+@keyframes coachDance{0%{transform:translateY(0) rotateZ(0)}25%{transform:translateY(-12px) rotateZ(-3deg)}50%{transform:translateY(0) rotateZ(0)}75%{transform:translateY(-12px) rotateZ(3deg)}100%{transform:translateY(0) rotateZ(0)}}
+
+.coach-emoji.thumbs-up{animation:coachBounce .6s ease,coachThumbsUp 1s ease .6s infinite!important;}
+.coach-emoji.clap{animation:coachBounce .6s ease,coachClap .8s ease .6s infinite!important;}
+.coach-emoji.dance{animation:coachBounce .6s ease,coachDance 1.2s ease .6s infinite!important;}
+
+/* ════════════════════════════════════════════════════
+   ARTIKEL-FARBKODIERUNG (Der/Die/Das)
+   ════════════════════════════════════════════════════ */
+.artikel-color-der{color:#DC2626;font-weight:700;}
+.artikel-color-die{color:#2563EB;font-weight:700;}
+.artikel-color-das{color:#EABD16;font-weight:700;}
+.artikel-badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;margin-right:4px;}
+.artikel-badge-der{background:#FEE2E2;color:#DC2626;}
+.artikel-badge-die{background:#DBEAFE;color:#2563EB;}
+.artikel-badge-das{background:#FEF3C7;color:#92400E;}
+
+/* ════════════════════════════════════════════════════
+   DESIGN 3.0 — Soft Modern · Hell- & Dunkelmodus
+   ════════════════════════════════════════════════════ */
+:root{
+  --canvas:#F4F6FA;--surface:#FFFFFF;--surface2:#EDF0F6;
+  --ink:#1B2534;--ink2:#5D6B7E;--ink3:#97A3B4;--line:#E5E9F1;
+  --acc:#5E6AD2;--acc2:#7B6FD9;--acc-tint:#ECEEFB;
+  --de1:#5E6AD2;--de2:#7B6FD9;--de-tint:#ECEEFB;
+  --fs1:#C9893A;--fs2:#D9A24A;--fs-tint:#F7EFE0;
+  --en1:#2E9D8E;--en2:#43B3A2;--en-tint:#E2F2EE;
+  --ok:#2F9E6B;--ok-bg:#E3F4EB;--ok-ink:#1E6B49;
+  --err:#D45D6C;--err-bg:#FBEAED;--err-ink:#A33848;
+  --warn:#C99230;--warn-bg:#F9F0DD;--warn-ink:#8A6420;
+  --info-bg:#E8F1FB;--info-ink:#33618F;
+  --pop:#222B3A;--pop-ink:#F2F5FA;
+  --bar:rgba(255,255,255,.9);
+  --sh-sm:0 1px 2px rgba(23,32,48,.04),0 2px 6px rgba(23,32,48,.05);
+  --sh-md:0 6px 18px rgba(23,32,48,.08);
+  --sh-lg:0 12px 30px rgba(23,32,48,.12);
+  --p:var(--acc);--pd:#4A55B8;--s:var(--acc2);
+  --bg:var(--canvas);--card:var(--surface);--txt:var(--ink);--txt2:var(--ink2);--bdr:var(--line);
+}
+body[data-theme=dark]{
+  --canvas:#0E1117;--surface:#171C26;--surface2:#232A38;
+  --ink:#E9EDF4;--ink2:#9FACBE;--ink3:#69768B;--line:#262E3D;
+  --acc:#8C96EC;--acc2:#A89EEF;--acc-tint:#242A40;
+  --de1:#8C96EC;--de2:#A89EEF;--de-tint:#242A40;
+  --fs1:#DFA659;--fs2:#E8B86F;--fs-tint:#2A2316;
+  --en1:#4BBBA9;--en2:#62CCBB;--en-tint:#152823;
+  --ok:#4DBE8C;--ok-bg:#172A21;--ok-ink:#7BD8AE;
+  --err:#E37687;--err-bg:#2C1B20;--err-ink:#F0A2AE;
+  --warn:#E0B25C;--warn-bg:#2B2415;--warn-ink:#EBC988;
+  --info-bg:#1B2735;--info-ink:#8FB4DC;
+  --pop:#2B3447;--pop-ink:#F2F5FA;
+  --bar:rgba(17,21,29,.9);
+  --sh-sm:0 1px 2px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.25);
+  --sh-md:0 8px 22px rgba(0,0,0,.4);
+  --sh-lg:0 14px 34px rgba(0,0,0,.5);
+  --pd:#7A84DD;
+}
+/* Branchen-Kurs „Meserie" — Stahlblau */
+body{--bf1:#4A7BAE;--bf2:#5E93C5;--bf-tint:#E4EEF7;}
+body[data-theme=dark]{--bf1:#6FA3D8;--bf2:#8AB6E4;--bf-tint:#16222E;}
+/* Kurs-Akzent folgt dem aktiven Tab (gilt auch in Lektion/Quiz) */
+body[data-tab=fs]{--acc:var(--fs1);--acc2:var(--fs2);--acc-tint:var(--fs-tint);}
+body[data-tab=beruf]{--acc:var(--bf1);--acc2:var(--bf2);--acc-tint:var(--bf-tint);}
+body[data-tab=en]{--acc:var(--en1);--acc2:var(--en2);--acc-tint:var(--en-tint);}
+body[data-tab=selectarii]{--acc:#64748B;--acc2:#7C8BA1;--acc-tint:var(--surface2);}
+body[data-theme=dark][data-tab=selectarii]{--acc:#93A2B7;--acc2:#A9B6C9;}
+
+html{background:var(--canvas);}
+/* Alias-Variablen HIER auf body auflösen — erst hier gelten Theme- & Tab-Attribute */
+body{background:var(--canvas);color:var(--ink);color-scheme:light;transition:background-color .25s ease;
+  --p:var(--acc);--s:var(--acc2);--bg:var(--canvas);--card:var(--surface);--txt:var(--ink);--txt2:var(--ink2);--bdr:var(--line);}
+body[data-theme=dark]{color-scheme:dark;}
+.mw{max-width:480px;}
+
+/* — Tab bar — */
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;
+  display:none;grid-template-columns:repeat(5,1fr);gap:2px;
+  background:var(--bar);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));}
+body.tabs-on .tabbar{display:grid;}
+body.tabs-on #app{padding-bottom:86px;}
+.tab-btn{border:none;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:6px 2px;border-radius:12px;cursor:pointer;color:var(--ink3);transition:all .15s;}
+.tab-btn .tab-ico{font-size:21px;line-height:1;filter:grayscale(.85) opacity(.75);transition:filter .15s;}
+.tab-btn .tab-lbl{font-size:10px;font-weight:700;letter-spacing:.1px;}
+.tab-btn.active{color:var(--acc);background:var(--acc-tint);}
+.tab-btn.active .tab-ico{filter:none;}
+.tab-btn:active{transform:scale(.94);}
+
+/* — Header: sanfte Tönung statt Knallfarben — */
+.hdr{background:linear-gradient(170deg,var(--acc-tint) 0%,var(--canvas) 96%);color:var(--ink);padding:24px 20px 18px;text-align:left;}
+.hdr::after{display:none;}
+.hdr.hdr-fs{background:linear-gradient(170deg,var(--fs-tint) 0%,var(--canvas) 96%);}
+.hdr.hdr-en{background:linear-gradient(170deg,var(--en-tint) 0%,var(--canvas) 96%);}
+.hdr.hdr-bf{background:linear-gradient(170deg,var(--bf-tint) 0%,var(--canvas) 96%);}
+.hdr.hdr-stats{background:linear-gradient(170deg,var(--surface2) 0%,var(--canvas) 96%);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;}
+.hdr-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--acc);opacity:1;margin-bottom:3px;}
+.hdr-stats .hdr-eyebrow{color:var(--ink2);}
+.hdr h1{font-size:27px;font-weight:900;letter-spacing:-.6px;line-height:1.05;color:var(--ink);}
+.hdr p{font-size:12.5px;color:var(--ink2);opacity:1;margin:5px 0 0;}
+.stats-row{justify-content:flex-start;margin-top:12px;}
+.pill{background:var(--surface);border:1px solid var(--line);color:var(--ink2);font-size:12px;padding:5px 12px;box-shadow:var(--sh-sm);}
+.theme-btn{cursor:pointer;font-size:14px;line-height:1;}
+.theme-btn:active{transform:scale(.93);}
+
+/* — Progress ring — */
+.ring-wrap{position:relative;width:64px;height:64px;flex-shrink:0;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:var(--line);stroke-width:6;}
+.ring-fg{fill:none;stroke:var(--acc);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .7s ease;}
+.ring-txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:var(--ink);}
+
+/* — Cards — */
+.prog-box,.zeit-card,.ampel-card,.lcard{background:var(--surface);box-shadow:var(--sh-sm);border:1px solid var(--line);}
+.lcard{border-radius:18px;padding:13px 14px;border-left-width:1px;margin-bottom:8px;}
+.lcard::before{width:0;}
+.lcard.done{border-color:transparent;background:var(--ok-bg);}
+.lcard.cur{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-tint),var(--sh-sm);}
+.lcard.locked{opacity:.45;}
+.l-ico{border-radius:12px;font-size:26px;width:46px;height:46px;background:var(--surface2);}
+.l-title{font-size:14.5px;letter-spacing:-.2px;color:var(--ink);}
+.l-sub{font-size:11.5px;color:var(--ink2);}
+.badge{font-size:10px;padding:2px 7px;background:var(--surface2);color:var(--ink2);}
+.badge.a1{background:var(--ok-bg);color:var(--ok-ink);}
+.badge.a2{background:var(--info-bg);color:var(--info-ink);}
+.badge.math{background:var(--acc-tint);color:var(--acc);}
+.badge.b1{background:var(--warn-bg);color:var(--warn-ink);}
+.badge.en{background:var(--en-tint);color:var(--en1);}
+.badge.bf{background:var(--bf-tint);color:var(--bf1);}
+.sec-title{font-size:11.5px;color:var(--ink3);letter-spacing:1.1px;}
+.sect-hdr{color:var(--ink3);}
+.motivate{color:var(--ink3);}
+.r-pill.r-grn{background:var(--ok-bg);color:var(--ok-ink);}
+.r-pill.r-yel{background:var(--warn-bg);color:var(--warn-ink);}
+.r-pill.r-red{background:var(--err-bg);color:var(--err-ink);}
+
+/* — Kurs-Infokarten — */
+.course-card{background:var(--surface);margin:14px 16px 6px;border-radius:16px;padding:14px 16px;
+  border:1px solid var(--line);box-shadow:var(--sh-sm);display:flex;align-items:center;gap:12px;}
+.cc-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;background:var(--surface2);}
+.cc-name{font-size:14.5px;font-weight:800;letter-spacing:-.2px;color:var(--ink);}
+.cc-sub{font-size:11.5px;color:var(--ink2);margin-top:2px;line-height:1.45;}
+.cc-val{margin-left:auto;font-size:17px;font-weight:900;color:var(--acc);white-space:nowrap;}
+
+/* — Schulklassen-Karte: hell & ruhig statt dunkel — */
+.klasse-card{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--sh-sm);}
+.klasse-name{font-size:16.5px;color:var(--ink);}
+.klasse-ro{color:var(--ink2);opacity:1;}
+.klasse-next{color:var(--ink3);opacity:1;}
+.klasse-badge{background:var(--acc-tint);color:var(--acc);}
+
+/* — Ampel — */
+.ampel-row{border-bottom:1px solid var(--line);}
+.ampel-light{width:11px;height:11px;}
+.ampel-name{font-size:12.5px;color:var(--ink);}
+.ampel-msg{color:var(--ink3);}
+.l-grn{background:var(--ok);box-shadow:none;}
+.l-yel{background:var(--warn);box-shadow:none;}
+.l-red{background:var(--err);box-shadow:none;}
+.l-off{background:var(--line);box-shadow:none;}
+.ampel-next{background:var(--acc-tint);color:var(--acc);}
+
+/* — Fahrschule — */
+.fs-steps{display:flex;gap:5px;margin-top:9px;}
+.fs-step{flex:1;height:7px;border-radius:99px;background:var(--surface2);}
+.fs-step.done{background:linear-gradient(90deg,var(--fs1),var(--fs2));}
+.fs-exam-box{background:var(--warn-bg);border:1px solid var(--warn);border-radius:12px;padding:10px 13px;font-size:12px;color:var(--warn-ink);line-height:1.55;margin-top:10px;}
+
+/* — Statistik-Tab — */
+.stat-hero{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 16px 6px;}
+.stat-tile{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:15px 14px;box-shadow:var(--sh-sm);}
+.stat-tile .st-val{font-size:23px;font-weight:900;letter-spacing:-.5px;color:var(--ink);}
+.stat-tile .st-lbl{font-size:10.5px;color:var(--ink3);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-top:3px;}
+.zeit-stat{background:var(--surface2);}
+.zeit-val{color:var(--acc);}
+.zeit-lbl{color:var(--ink3);}
+.ach-grid{display:flex;flex-direction:column;gap:7px;}
+.ach-row{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:10px 13px;box-shadow:var(--sh-sm);}
+.ach-row.locked{opacity:.45;filter:grayscale(.6);}
+.ach-ico{font-size:22px;width:34px;text-align:center;flex-shrink:0;}
+.ach-name{font-size:13px;font-weight:700;color:var(--ink);}
+.ach-desc{font-size:11px;color:var(--ink2);margin-top:1px;}
+.ach-check{margin-left:auto;font-size:15px;}
+
+/* — Lektion (Vokabel-Screen) — */
+.v-hdr{background:var(--surface);color:var(--ink);border-bottom:1px solid var(--line);}
+.v-hdr-sub{color:var(--ink2);opacity:1;}
+.back-btn{background:var(--surface2);color:var(--ink);}
+.back-btn:active{background:var(--line);}
+.cnt-pill{background:var(--surface2);color:var(--ink2);}
+.vc-card{border:1px solid var(--line);box-shadow:var(--sh-md);}
+.vc-de{color:var(--acc);}
+.vc-prog{background:var(--surface2);}
+.vc-prog-fill{background:var(--acc);}
+.speak-btn{background:var(--acc);}
+.tip-box{background:var(--warn-bg);border-left:3px solid var(--warn);color:var(--warn-ink);}
+.eg-box{background:var(--info-bg);border-left:3px solid var(--info-ink);color:var(--info-ink);}
+.conf-label{color:var(--ink3);}
+.conf-btn{background:var(--surface);border-color:var(--line);color:var(--ink2);}
+.conf-btn.active-red{background:var(--err-bg);border-color:var(--err);color:var(--err-ink);}
+.conf-btn.active-yel{background:var(--warn-bg);border-color:var(--warn);color:var(--warn-ink);}
+.conf-btn.active-grn{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-ink);}
+.nav-btn{background:var(--surface);border-color:var(--line);color:var(--ink);}
+.nav-btn.pri{background:var(--acc);border-color:transparent;color:#fff;}
+.quiz-go-btn{background:var(--ok);box-shadow:0 5px 16px rgba(47,158,107,.28);}
+
+/* — Quiz — */
+.q-hdr,.q-hdr.math-hdr,.q-hdr.fs-hdr,.q-hdr.en-hdr{background:var(--surface);color:var(--ink);border-bottom:1px solid var(--line);}
+.q-prog-bar{background:var(--surface2);}
+.q-prog-fill{background:var(--acc);}
+.q-card{background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-sm);}
+.q-num{color:var(--ink3);}
+.q-text{color:var(--ink);}
+.q-text.math-q{color:var(--ink);}
+.q-hint{color:var(--ink3);}
+.math-hint{background:var(--surface2);color:var(--ink2);}
+.q-opt{border-width:1.5px;border-radius:14px;box-shadow:var(--sh-sm);background:var(--surface);border-color:var(--line);color:var(--ink);}
+.q-opt:not(.dis):hover{border-color:var(--acc);background:var(--acc-tint);}
+.q-opt.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok-ink);}
+.q-opt.err{background:var(--err-bg);border-color:var(--err);color:var(--err-ink);}
+.q-fb.ok{background:var(--ok-bg);color:var(--ok-ink);}
+.q-fb.err{background:var(--err-bg);color:var(--err-ink);}
+.q-next,.q-next.math-next,.q-next.fs-next,.q-next.en-next{background:var(--acc);box-shadow:0 4px 14px rgba(23,32,48,.18);}
+
+/* — Ergebnis-Screen: ruhig statt Vollfarbe — */
+.res-wrap{background:var(--canvas);color:var(--ink);}
+.res-sub{color:var(--ink2);opacity:1;}
+.res-score-card{background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-md);color:var(--ink);}
+.res-lbl{color:var(--ink2);opacity:1;}
+.xp-pill{background:var(--acc-tint);color:var(--acc);}
+.res-btn{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--sh-sm);}
+.res-btns .res-btn:first-child{background:var(--acc);color:#fff;border-color:transparent;}
+.res-btn.sec{background:transparent;color:var(--ink2);border:1px solid var(--line);}
+
+/* — Weiterlern-Karte — */
+.resume-card{cursor:pointer;border:1.5px solid var(--acc);transition:transform .12s;}
+.resume-card:active{transform:scale(.98);}
+
+/* — Audio-Einstellungen — */
+.voice-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);}
+.voice-row:last-child{border-bottom:none;}
+.voice-lbl{font-size:12px;font-weight:700;color:var(--ink2);width:86px;flex-shrink:0;}
+.voice-sel{flex:1;min-width:0;background:var(--surface2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 9px;font-size:12.5px;font-family:inherit;}
+.vtest{background:var(--acc-tint);color:var(--acc);border:none;border-radius:10px;width:36px;height:36px;font-size:15px;cursor:pointer;flex-shrink:0;}
+.vtest:active{transform:scale(.92);}
+.rate-btns{display:flex;gap:6px;flex:1;}
+.rate-btn{flex:1;background:var(--surface2);color:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:8px 4px;font-size:12px;font-weight:700;cursor:pointer;}
+.rate-btn.on{background:var(--acc);border-color:transparent;color:#fff;}
+
+/* — Toast & Popup — */
+.toast{background:var(--pop);color:var(--pop-ink);}
+.ach-popup{background:var(--pop);color:var(--pop-ink);}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="ach-popup" id="ach-popup"><div id="ach-text"></div><div class="ach-sub" id="ach-sub"></div></div>
+<div id="app" class="mw"></div>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tab-btn" id="tb-de" onclick="setTab('de')"><span class="tab-ico">🇩🇪</span><span class="tab-lbl">Germană</span></button>
+  <button class="tab-btn" id="tb-beruf" onclick="setTab('beruf')"><span class="tab-ico">💼</span><span class="tab-lbl">Meserie</span></button>
+  <button class="tab-btn" id="tb-fs" onclick="setTab('fs')"><span class="tab-ico">🚗</span><span class="tab-lbl">Fahrschule</span></button>
+  <button class="tab-btn" id="tb-en" onclick="setTab('en')"><span class="tab-ico">🇬🇧</span><span class="tab-lbl">Engleză</span></button>
+  <button class="tab-btn" id="tb-selectarii" onclick="setTab('selectarii')"><span class="tab-ico">⚙️</span><span class="tab-lbl">Selectări</span></button>
+</nav>
+
+<script>
+// ════════════════════════════════════════════════════
+//  LECȚII + TIPS + EXEMPLE
+// ════════════════════════════════════════════════════
+const LESSONS = [
+{
+  id:1,emoji:'👋',title:'Begrüßungen',titleRo:'Salutări și expresii de bază',level:'A1',color:'#4F46E5',
+  vocab:[
+    {de:'Hallo',            ro:'Salut / Bună',         emoji:'👋', tip:'Klingt fast wie englisch „Hello"! Aceeași rădăcină germanică.', eg:'Hallo! Ich heiße Maria.',egRo:'Salut! Mă numesc Maria.'},
+    {de:'Guten Morgen',     ro:'Bună dimineața',        emoji:'🌅', tip:'„Gut" = bun/bine. „Morgen" = dimineață. Compune singur!'},
+    {de:'Guten Tag',        ro:'Bună ziua',             emoji:'☀️', tip:'„Tag" = zi. Guten Tag = zi bună!'},
+    {de:'Guten Abend',      ro:'Bună seara',            emoji:'🌆', tip:'„Abend" = seară. Pronunță: A-bent.'},
+    {de:'Gute Nacht',       ro:'Noapte bună',           emoji:'🌙', tip:'„Nacht" = noapte. Ca englezescul „night"!'},
+    {de:'Auf Wiedersehen',  ro:'La revedere',           emoji:'🙋', tip:'„wieder" = din nou, „sehen" = a vedea. = Ne revedem!', eg:'Auf Wiedersehen! Bis morgen!',egRo:'La revedere! Până mâine!'},
+    {de:'Tschüss',          ro:'Pa / Ciao',             emoji:'✌️', tip:'Cel mai informal „pa". Folosit între prieteni.', phoneticHint:'TSCHÜSS (pronunță „ț" ca în români)'},
+    {de:'Bitte',            ro:'Vă rog / Poftiți',      emoji:'🙏', tip:'„Bitte" = te rog SAU poftim. Depinde de context!', eg:'Bitte schön!',egRo:'Poftiți! / Cu plăcere!'},
+    {de:'Danke',            ro:'Mulțumesc',             emoji:'😊', tip:'Rădăcina „dank" = recunoștință. Danke = îți sunt recunoscător!', eg:'Danke sehr!',egRo:'Mulțumesc mult!'},
+    {de:'Ja',               ro:'Da',                    emoji:'✅', eg:'Ja, natürlich!',egRo:'Da, desigur!'},
+    {de:'Nein',             ro:'Nu',                    emoji:'❌', eg:'Nein, danke.',egRo:'Nu, mulțumesc.'},
+    {de:'Entschuldigung',   ro:'Scuzați / Scuze',       emoji:'🙇', tip:'Împarte: ent-SCHULD-igung. „Schuld" = vină. Înlătură vina!'},
+  ]
+},
+{
+  id:2,emoji:'🔢',title:'Zahlen 1–20',titleRo:'Numerele de la 1 la 20',level:'A1',color:'#7C3AED',
+  vocab:[
+    {de:'eins',      ro:'unu (1)',            emoji:'1️⃣', tip:'„eins" = 1. La numărare: ein, zwei, drei…'},
+    {de:'zwei',      ro:'doi / două (2)',     emoji:'2️⃣'},
+    {de:'drei',      ro:'trei (3)',           emoji:'3️⃣', tip:'Sună ca englezescul „three"! Aceeași rădăcină.'},
+    {de:'vier',      ro:'patru (4)',          emoji:'4️⃣'},
+    {de:'fünf',      ro:'cinci (5)',          emoji:'5️⃣', tip:'Pronunță: FÜNF. Are F la început și la sfârșit!'},
+    {de:'sechs',     ro:'șase (6)',           emoji:'6️⃣', tip:'Pronunță: ZEKS (nu „sechs" ca în română!).'},
+    {de:'sieben',    ro:'șapte (7)',          emoji:'7️⃣'},
+    {de:'acht',      ro:'opt (8)',            emoji:'8️⃣', tip:'Scurt și rapid: ACHT. Ca englezescul „eight"!'},
+    {de:'neun',      ro:'nouă (9)',           emoji:'9️⃣'},
+    {de:'zehn',      ro:'zece (10)',          emoji:'🔟', tip:'Pronunță: TSAYN. Sună ca englezescul „ten"!'},
+    {de:'elf',       ro:'unsprezece (11)',    emoji:'🔢'},
+    {de:'zwölf',     ro:'doisprezece (12)',   emoji:'🔢', tip:'„Zwölf" = 12. Gândește-te: Z-WOLF (doisprezece lupi!)'},
+    {de:'dreizehn',  ro:'treisprezece (13)',  emoji:'🔢', tip:'drei (3) + zehn (10) = dreizehn. Logică perfectă!'},
+    {de:'vierzehn',  ro:'paisprezece (14)',   emoji:'🔢'},
+    {de:'fünfzehn',  ro:'cincisprezece (15)', emoji:'🔢'},
+    {de:'zwanzig',   ro:'douăzeci (20)',      emoji:'💯', tip:'„Zwanzig" = 20. Pronunță: TSFAN-tsig.'},
+    {de:'dreißig',   ro:'treizeci (30)',      emoji:'💯'},
+    {de:'hundert',   ro:'o sută (100)',       emoji:'💯', tip:'„hundert" = sută. Ca englezescul „hundred"!'},
+  ]
+},
+{
+  id:3,emoji:'🎨',title:'Farben',titleRo:'Culori',level:'A1',color:'#EC4899',
+  vocab:[
+    {de:'rot',      ro:'roșu',          emoji:'🔴', tip:'„ROT" și „ROȘU" — ambele încep cu R-O! Ușor!'},
+    {de:'blau',     ro:'albastru',      emoji:'🔵', tip:'Ca englezescul „blue"! Aceeași familie germanică.'},
+    {de:'grün',     ro:'verde',         emoji:'🟢', tip:'Ca englezescul „green" + umlaut ü. gr-ÜN!'},
+    {de:'gelb',     ro:'galben',        emoji:'🟡', tip:'GELB ↔ GALBEN — ambele încep cu G! Rețin ușor!'},
+    {de:'weiß',     ro:'alb',           emoji:'⬜', tip:'Pronunță: VAIS. Gândește-te: alb = pur = WEISS.'},
+    {de:'schwarz',  ro:'negru',         emoji:'⬛', tip:'Pronunță: SHVARTS. „Schwarzwälder" = pădure neagră!'},
+    {de:'orange',   ro:'portocaliu',    emoji:'🟠', tip:'Identic cu românescul „orange"! Împrumut din franceză.'},
+    {de:'lila',     ro:'violet / mov',  emoji:'🟣', tip:'Identic cu românescul „lila"! Ușor de reținut.'},
+    {de:'rosa',     ro:'roz',           emoji:'🌸', tip:'„Rosa" = roz. Ca floarea (Rosae). Roz = culoarea trandafirilor!'},
+    {de:'braun',    ro:'maro',          emoji:'🟤', tip:'Ca englezescul „brown"! Aceeași rădăcină.'},
+    {de:'grau',     ro:'gri',           emoji:'🩶', tip:'Pronunță: GRAU. Ca englezescul „grey"!'},
+    {de:'bunt',     ro:'colorat / variat', emoji:'🌈'},
+  ]
+},
+{
+  id:4,emoji:'👨‍👩‍👧‍👦',title:'Familie',titleRo:'Familia',level:'A1',color:'#F59E0B',
+  vocab:[
+    {de:'die Mutter',       ro:'mama',              emoji:'👩', tip:'Ca englezescul „mother"! Rădăcină proto-indo-europeană!', eg:'Meine Mutter heißt Anna.',egRo:'Mama mea se numește Anna.'},
+    {de:'der Vater',        ro:'tata',              emoji:'👨', tip:'Ca englezescul „father"! Aceeași rădăcină veche.', eg:'Mein Vater arbeitet.',egRo:'Tatăl meu lucrează.'},
+    {de:'die Schwester',    ro:'sora',              emoji:'👧', tip:'Ca englezescul „sister"! Rădăcină indo-europeană!'},
+    {de:'der Bruder',       ro:'fratele',           emoji:'👦', tip:'Ca englezescul „brother"! Aceeași familie de limbi.'},
+    {de:'die Großmutter',   ro:'bunica',            emoji:'👵', tip:'Groß (mare) + Mutter (mamă) = bunica!'},
+    {de:'der Großvater',    ro:'bunicul',           emoji:'👴', tip:'Groß (mare) + Vater (tată) = bunicul!'},
+    {de:'die Tante',        ro:'mătușa',            emoji:'👩‍🦱', tip:'Ca englezescul „aunt" / franțuzescul „tante".'},
+    {de:'der Onkel',        ro:'unchiul',           emoji:'👨‍🦱', tip:'Ca englezescul „uncle" — rădăcină latină!'},
+    {de:'die Tochter',      ro:'fiica',             emoji:'🧒', tip:'Ca englezescul „daughter". Pronunță: TOCHTER.'},
+    {de:'der Sohn',         ro:'fiul',              emoji:'🧒', tip:'Ca englezescul „son"! Aceeași rădăcină germanică.'},
+    {de:'die Frau',         ro:'soția / femeia',    emoji:'👰', eg:'Meine Frau ist Ärztin.',egRo:'Soția mea este doctoriță.'},
+    {de:'der Mann',         ro:'soțul / bărbatul',  emoji:'🤵', eg:'Mein Mann kommt aus Rumänien.',egRo:'Soțul meu vine din România.'},
+  ]
+},
+{
+  id:5,emoji:'🍽️',title:'Essen & Trinken',titleRo:'Mâncare și Băutură',level:'A1',color:'#EF4444',
+  vocab:[
+    {de:'das Brot',       ro:'pâinea',     emoji:'🍞', tip:'Ca englezescul „bread" fără vocala finală. BROT!', eg:'Das Brot ist frisch.',egRo:'Pâinea este proaspătă.'},
+    {de:'die Milch',      ro:'laptele',    emoji:'🥛', tip:'Ca englezescul „milk"! Aceeași rădăcină germanică.'},
+    {de:'das Wasser',     ro:'apa',        emoji:'💧', tip:'Ca englezescul „water"! Aceeași rădăcină.'},
+    {de:'der Kaffee',     ro:'cafeaua',    emoji:'☕', tip:'Identic cu românescul „cafea"! Origine arabă (qahwa).'},
+    {de:'der Tee',        ro:'ceaiul',     emoji:'🫖', tip:'Pronunță: TAY. Ca englezescul „tea"!'},
+    {de:'das Fleisch',    ro:'carnea',     emoji:'🥩'},
+    {de:'das Gemüse',     ro:'legumele',   emoji:'🥦'},
+    {de:'das Obst',       ro:'fructele',   emoji:'🍎'},
+    {de:'der Apfel',      ro:'mărul',      emoji:'🍎', tip:'Ca englezescul „apple"! Aceeași rădăcină germanică.', eg:'Der Apfel ist rot.',egRo:'Mărul este roșu.'},
+    {de:'die Banane',     ro:'banana',     emoji:'🍌', tip:'Identic cu românescul „banană"! Origine africană.'},
+    {de:'die Kartoffel',  ro:'cartoful',   emoji:'🥔'},
+    {de:'der Käse',       ro:'brânza',     emoji:'🧀', tip:'Pronunță: KAY-ze. Ca englezescul „cheese"!'},
+  ]
+},
+{
+  id:6,emoji:'👷',title:'Berufe',titleRo:'Profesii',level:'A1',color:'#059669',
+  vocab:[
+    {de:'der Arzt',              ro:'doctorul (m)',           emoji:'👨‍⚕️', tip:'„Arzt" = doctor. Pronunță: ARTST.'},
+    {de:'die Ärztin',            ro:'doctorița (f)',          emoji:'👩‍⚕️', tip:'Adaugă „-in" pentru forma feminină!'},
+    {de:'der Lehrer',            ro:'profesorul (m)',         emoji:'👨‍🏫', tip:'„lehren" = a preda/învăța. Lehrer = cel care predă.'},
+    {de:'die Lehrerin',          ro:'profesoara (f)',         emoji:'👩‍🏫'},
+    {de:'der Koch',              ro:'bucătarul',              emoji:'👨‍🍳', tip:'„kochen" = a găti. Koch = cel care gătește.'},
+    {de:'der Fahrer',            ro:'șoferul',                emoji:'🚗', tip:'„fahren" = a conduce. Fahrer = cel care conduce.'},
+    {de:'der Ingenieur',         ro:'inginerul',              emoji:'👨‍💻', tip:'Identic cu românescul „inginer"! Origine latină.'},
+    {de:'die Krankenschwester',  ro:'asistenta medicală',     emoji:'👩‍⚕️', tip:'Krank (bolnav) + Schwester (soră) = soră medicală!'},
+    {de:'der Polizist',          ro:'polițistul',             emoji:'👮', tip:'Ca românescul „polițist"! Origine latină (politia).'},
+    {de:'der Verkäufer',         ro:'vânzătorul',             emoji:'🏪', tip:'„verkaufen" = a vinde. Verkäufer = vânzătorul.'},
+    {de:'der Bauer',             ro:'fermierul / agricultorul', emoji:'👨‍🌾'},
+    {de:'der Elektriker',        ro:'electricianul',          emoji:'⚡', tip:'Ca românescul „electrician"! Origine greacă (elektron).'},
+  ]
+},
+{
+  id:7,emoji:'🏠',title:'Das Haus',titleRo:'Casa și camerele',level:'A1',color:'#0EA5E9',
+  vocab:[
+    {de:'das Haus',          ro:'casa',               emoji:'🏠', tip:'Ca englezescul „house"! Aceeași rădăcină.'},
+    {de:'die Wohnung',       ro:'apartamentul',       emoji:'🏢', tip:'„wohnen" = a locui. Wohnung = locuința.'},
+    {de:'das Zimmer',        ro:'camera / încăperea', emoji:'🚪'},
+    {de:'die Küche',         ro:'bucătăria',          emoji:'🍳', tip:'Ca englezescul „kitchen"! Pronunță: KÜ-che.'},
+    {de:'das Badezimmer',    ro:'baia / baie',        emoji:'🛁', tip:'Bad (baie) + Zimmer (cameră) = camera de baie!'},
+    {de:'das Wohnzimmer',    ro:'sufrageria',         emoji:'🛋️', tip:'Wohn (a locui) + Zimmer (cameră) = camera de zi!'},
+    {de:'das Schlafzimmer',  ro:'dormitorul',         emoji:'🛏️', tip:'Schlaf (somn) + Zimmer (cameră) = camera de dormit!'},
+    {de:'die Tür',           ro:'ușa',                emoji:'🚪'},
+    {de:'das Fenster',       ro:'fereastra',          emoji:'🪟', tip:'Ca englezescul „fenestration". Rădăcină latină (fenestra).'},
+    {de:'der Tisch',         ro:'masa',               emoji:'🪑', eg:'Der Tisch ist groß.',egRo:'Masa este mare.'},
+    {de:'der Stuhl',         ro:'scaunul',            emoji:'🪑'},
+    {de:'das Bett',          ro:'patul',              emoji:'🛏️', tip:'Ca englezescul „bed"! Aceeași rădăcină germanică.'},
+  ]
+},
+{
+  id:8,emoji:'🫀',title:'Körper',titleRo:'Corpul uman',level:'A1',color:'#D946EF',
+  vocab:[
+    {de:'der Kopf',    ro:'capul',               emoji:'🤯', tip:'Pronunță: KOPF. Gândește: COPFul are creierul!'},
+    {de:'das Auge',    ro:'ochiul',              emoji:'👁️', tip:'Plural: Augen (ochi). Pronunță: OW-gen.'},
+    {de:'die Nase',    ro:'nasul',               emoji:'👃', tip:'Ca englezescul „nasal" (nazal)! Rădăcină latină.'},
+    {de:'der Mund',    ro:'gura',                emoji:'👄', tip:'Pronunță: MOONT. Gura face sunet = MUND!'},
+    {de:'das Ohr',     ro:'urechea',             emoji:'👂', tip:'Plural: Ohren. Pronunță: OR.'},
+    {de:'der Arm',     ro:'brațul',              emoji:'💪', tip:'Ca englezescul „arm"! Identic! Rădăcină germanică.', eg:'Mein Arm ist stark.',egRo:'Brațul meu este puternic.'},
+    {de:'die Hand',    ro:'mâna',                emoji:'🤚', tip:'Ca englezescul „hand"! Identic! Rădăcină germanică.'},
+    {de:'der Bauch',   ro:'burta / abdomenul',   emoji:'🤰'},
+    {de:'das Bein',    ro:'piciorul',            emoji:'🦵'},
+    {de:'der Fuß',     ro:'talpa / laba piciorului', emoji:'🦶', tip:'Ca englezescul „foot"! Rădăcină proto-germanică.'},
+    {de:'das Herz',    ro:'inima',               emoji:'❤️', tip:'Ca englezescul „heart"! Rădăcină indo-europeană.'},
+    {de:'der Rücken',  ro:'spatele',             emoji:'🔙'},
+  ]
+},
+{
+  id:9,emoji:'📅',title:'Wochentage & Monate',titleRo:'Zile și Luni',level:'A1',color:'#6366F1',
+  vocab:[
+    {de:'Montag',     ro:'luni',       emoji:'📅', tip:'Mon = Lună (Mon-tag). Ziua Lunii!'},
+    {de:'Dienstag',   ro:'marți',      emoji:'📅'},
+    {de:'Mittwoch',   ro:'miercuri',   emoji:'📅', tip:'Mitt = mijloc, Woche = săptămână. Miercurea = mijlocul săptămânii!'},
+    {de:'Donnerstag', ro:'joi',        emoji:'📅', tip:'Donner = tunet (Thor/Donar). Ziua lui Thor!'},
+    {de:'Freitag',    ro:'vineri',     emoji:'📅', tip:'Frei = liber! Vinerea = aproape weekend! 🎉'},
+    {de:'Samstag',    ro:'sâmbătă',    emoji:'🎉'},
+    {de:'Sonntag',    ro:'duminică',   emoji:'⛪', tip:'Sonne = soare. Ziua Soarelui!'},
+    {de:'Januar',     ro:'ianuarie',   emoji:'❄️', tip:'Ca românescul „ianuarie"! Origine latină (Janus).'},
+    {de:'März',       ro:'martie',     emoji:'🌱', tip:'Ca românescul „martie"! Origine latină (Mars).'},
+    {de:'Juni',       ro:'iunie',      emoji:'☀️', tip:'Ca românescul „iunie"! Origine latină (Junius).'},
+    {de:'September',  ro:'septembrie', emoji:'🍂', tip:'Identic cu românescul! Origine latină (septem = 7).'},
+    {de:'Dezember',   ro:'decembrie',  emoji:'🎄', tip:'Ca românescul „decembrie"! Origine latină (decem = 10).'},
+  ]
+},
+{
+  id:10,emoji:'🐾',title:'Tiere',titleRo:'Animale',level:'A1',color:'#84CC16',
+  vocab:[
+    {de:'der Hund',     ro:'câinele',        emoji:'🐕', tip:'Ca englezescul „hound"! Câinele de vânătoare.'},
+    {de:'die Katze',    ro:'pisica',         emoji:'🐈', tip:'Pronunță: KAT-se. Ca englezescul „cat"!'},
+    {de:'das Pferd',    ro:'calul',          emoji:'🐎'},
+    {de:'die Kuh',      ro:'vaca',           emoji:'🐄', tip:'Ca englezescul „cow"! Aceeași rădăcină germanică.'},
+    {de:'das Huhn',     ro:'găina / puiul',  emoji:'🐔'},
+    {de:'der Fisch',    ro:'peștele',        emoji:'🐟', tip:'Ca englezescul „fish"! Rădăcină proto-germanică.'},
+    {de:'der Vogel',    ro:'pasărea',        emoji:'🐦'},
+    {de:'die Maus',     ro:'șoarecele',      emoji:'🐭', tip:'Ca englezescul „mouse"! Aceeași rădăcină.'},
+    {de:'der Löwe',     ro:'leul',           emoji:'🦁'},
+    {de:'der Elefant',  ro:'elefantul',      emoji:'🐘', tip:'Ca românescul „elefant"! Origine greacă.'},
+    {de:'der Bär',      ro:'ursul',          emoji:'🐻'},
+    {de:'der Hase',     ro:'iepurele',       emoji:'🐰'},
+  ]
+},
+{
+  id:11,emoji:'⛅',title:'Wetter',titleRo:'Vremea',level:'A1',color:'#06B6D4',
+  vocab:[
+    {de:'die Sonne',      ro:'soarele',             emoji:'☀️', eg:'Die Sonne scheint.',egRo:'Soarele strălucește.'},
+    {de:'der Regen',      ro:'ploaia',              emoji:'🌧️', eg:'Es regnet heute.',egRo:'Astăzi plouă.'},
+    {de:'der Schnee',     ro:'zăpada',              emoji:'❄️', tip:'Ca englezescul „snow"! Rădăcină germanică.'},
+    {de:'der Wind',       ro:'vântul',              emoji:'💨', tip:'Ca englezescul „wind"! Identic pronunțat.'},
+    {de:'die Wolke',      ro:'norul',               emoji:'☁️'},
+    {de:'heiß',           ro:'fierbinte / cald',    emoji:'🔥'},
+    {de:'kalt',           ro:'rece / frig',         emoji:'🥶', tip:'Ca englezescul „cold"! Aceeași rădăcină.'},
+    {de:'warm',           ro:'cald / plăcut',       emoji:'😊', tip:'Identic cu englezescul „warm"! Rădăcină germanică.'},
+    {de:'Es regnet',      ro:'Plouă',               emoji:'🌦️'},
+    {de:'Es schneit',     ro:'Ninge',               emoji:'🌨️'},
+    {de:'Es ist sonnig',  ro:'Este însorit',        emoji:'😎'},
+    {de:'der Sturm',      ro:'furtuna / vijelia',   emoji:'⛈️', tip:'Ca englezescul „storm"! Aceeași rădăcină.'},
+  ]
+},
+{
+  id:12,emoji:'⏰',title:'Uhrzeit',titleRo:'Ora și timpul',level:'A2',color:'#F97316',
+  vocab:[
+    {de:'die Uhr',            ro:'ceasul / ora',            emoji:'🕐', eg:'Die Uhr zeigt drei.',egRo:'Ceasul arată trei.'},
+    {de:'Wie spät ist es?',   ro:'Cât este ceasul?',        emoji:'❓'},
+    {de:'Es ist drei Uhr',    ro:'Este ora trei (3:00)',     emoji:'🕒'},
+    {de:'halb drei',          ro:'jumătate după 2 (2:30)',   emoji:'🕝', tip:'„halb" = jumătate. Atenție: halb drei = 2:30, nu 3:30!'},
+    {de:'Viertel nach vier',  ro:'un sfert după 4 (4:15)',   emoji:'🕓', tip:'Viertel = sfert (1/4). Nach = după.'},
+    {de:'der Morgen',         ro:'dimineața',               emoji:'🌄'},
+    {de:'der Mittag',         ro:'prânzul / amiaza',        emoji:'🌞', tip:'Mitt (mijloc) + Tag (zi) = mijlocul zilei!'},
+    {de:'der Abend',          ro:'seara',                   emoji:'🌇'},
+    {de:'die Nacht',          ro:'noaptea',                 emoji:'🌃', tip:'Ca englezescul „night"! Rădăcină indo-europeană.'},
+    {de:'früh',               ro:'devreme',                 emoji:'⬆️'},
+    {de:'spät',               ro:'târziu',                  emoji:'⬇️'},
+    {de:'pünktlich',          ro:'punctual / la timp',      emoji:'⏱️', tip:'Ca românescul „punctual"! Origine latină (punctum).'},
+  ]
+},
+{
+  id:13,emoji:'🏃',title:'Grundverben',titleRo:'Verbe de bază',level:'A2',color:'#8B5CF6',
+  vocab:[
+    {de:'sein',      ro:'a fi — ich bin = eu sunt',          emoji:'💡', tip:'„sein" = a fi. Neregulat! bin/bist/ist/sind.', eg:'Ich bin Rumäne.',egRo:'Eu sunt român.'},
+    {de:'haben',     ro:'a avea — ich habe = eu am',         emoji:'✋', tip:'„haben" = a avea. Esențial! habe/hast/hat/haben.', eg:'Ich habe eine Frage.',egRo:'Am o întrebare.'},
+    {de:'gehen',     ro:'a merge — ich gehe = eu merg',      emoji:'🚶', eg:'Ich gehe nach Hause.',egRo:'Merg acasă.'},
+    {de:'kommen',    ro:'a veni — ich komme = eu vin',       emoji:'➡️', eg:'Ich komme aus Rumänien.',egRo:'Vin din România.'},
+    {de:'essen',     ro:'a mânca — ich esse = eu mănânc',    emoji:'🍽️'},
+    {de:'trinken',   ro:'a bea — ich trinke = eu beau',      emoji:'🥤'},
+    {de:'sprechen',  ro:'a vorbi — ich spreche = eu vorbesc', emoji:'🗣️'},
+    {de:'lernen',    ro:'a învăța — ich lerne = eu învăț',   emoji:'📚', tip:'„lernen" = a învăța (singur). „lehren" = a preda altora.'},
+    {de:'arbeiten',  ro:'a lucra — ich arbeite = eu lucrez',  emoji:'💼'},
+    {de:'kaufen',    ro:'a cumpăra — ich kaufe = eu cumpăr',  emoji:'🛒'},
+    {de:'schlafen',  ro:'a dormi — ich schlafe = eu dorm',   emoji:'😴'},
+    {de:'machen',    ro:'a face — ich mache = eu fac',       emoji:'🔨'},
+  ]
+},
+{
+  id:14,emoji:'💬',title:'Einfache Sätze',titleRo:'Propoziții esențiale',level:'A2',color:'#10B981',
+  vocab:[
+    {de:'Ich heiße ...',            ro:'Mă numesc ...',              emoji:'🏷️', eg:'Ich heiße Klaus.',egRo:'Mă numesc Klaus.'},
+    {de:'Wie heißen Sie?',          ro:'Cum vă numiți? (formal)',     emoji:'❓'},
+    {de:'Wie alt sind Sie?',        ro:'Câți ani aveți?',            emoji:'🎂', eg:'Ich bin 30 Jahre alt.',egRo:'Am 30 de ani.'},
+    {de:'Ich komme aus Rumänien',   ro:'Vin din România',            emoji:'🇷🇴'},
+    {de:'Ich spreche Deutsch',      ro:'Vorbesc germana',            emoji:'🇩🇪'},
+    {de:'Wo ist ...?',              ro:'Unde este ...?',             emoji:'📍', eg:'Wo ist der Bahnhof?',egRo:'Unde este gara?'},
+    {de:'Was kostet das?',          ro:'Cât costă asta?',            emoji:'💰'},
+    {de:'Ich verstehe nicht',       ro:'Nu înțeleg',                 emoji:'🤷'},
+    {de:'Können Sie helfen?',       ro:'Puteți să ajutați?',         emoji:'🙋'},
+    {de:'Wie bitte?',               ro:'Poftim? / Pardon?',          emoji:'👂'},
+    {de:'Ich weiß nicht',           ro:'Nu știu',                    emoji:'🤔'},
+    {de:'Das ist super!',           ro:'Asta e super!',              emoji:'🤩'},
+  ]
+},
+{
+  id:15,emoji:'🏙️',title:'Im Alltag',titleRo:'Viața de zi cu zi',level:'A2',color:'#EF4444',
+  vocab:[
+    {de:'der Supermarkt',   ro:'supermarketul',               emoji:'🛒', tip:'Identic cu românescul! Origine engleză.'},
+    {de:'die Apotheke',     ro:'farmacia',                    emoji:'💊', tip:'Ca românescul „apotecă"! Origine greacă (apotheke).'},
+    {de:'das Krankenhaus',  ro:'spitalul',                    emoji:'🏥', tip:'Krank (bolnav) + Haus (casă) = casa bolnavilor!'},
+    {de:'die Schule',       ro:'școala',                      emoji:'🏫', tip:'Ca românescul „școală"! Origine latină (schola).'},
+    {de:'der Bahnhof',      ro:'gara / stația de tren',       emoji:'🚂', tip:'Bahn (cale ferată) + Hof (curte) = curtea feroviară!'},
+    {de:'das Büro',         ro:'biroul',                      emoji:'🏢', tip:'Ca românescul „birou"! Origine franceză.'},
+    {de:'die Bank',         ro:'banca',                       emoji:'🏦', tip:'Identic cu românescul „bancă"! Origine latină.'},
+    {de:'links',            ro:'stânga',                      emoji:'⬅️'},
+    {de:'rechts',           ro:'dreapta',                     emoji:'➡️'},
+    {de:'geradeaus',        ro:'înainte / drept',             emoji:'⬆️', tip:'Gerade (drept) + aus (afară) = mergi drept înainte!'},
+    {de:'das Ticket',       ro:'biletul',                     emoji:'🎫', tip:'Identic cu românescul „tichet"! Origine engleză.'},
+    {de:'der Notfall',      ro:'urgența',                     emoji:'🆘', tip:'Not (nevoie/urgență) + Fall (caz) = caz de urgență!'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   LEKTION 16 — RECHNEN 1 (Matematică de bază)
+   ════════════════════════════════════════════════════ */
+{
+  id:16,type:'math',emoji:'🧮',title:'Rechnen 1',titleRo:'Calcul matematic de bază',level:'A1',color:'#3B82F6',
+  vocab:[
+    {de:'plus (+)',        ro:'plus',              emoji:'➕', tip:'Identic cu românescul! Origine latină.', eg:'Zwei plus drei ist fünf.',egRo:'Doi plus trei este cinci.'},
+    {de:'minus (−)',       ro:'minus',             emoji:'➖', tip:'Identic cu românescul! Origine latină.', eg:'Zehn minus vier ist sechs.',egRo:'Zece minus patru este șase.'},
+    {de:'mal (×)',         ro:'înmulțit cu',       emoji:'✖️', tip:'„mal" = dată/ori. Drei MAL vier = de trei ori patru!', eg:'Drei mal vier ist zwölf.',egRo:'Trei ori patru este doisprezece.'},
+    {de:'geteilt durch (÷)', ro:'împărțit la',     emoji:'➗', tip:'geteilt = împărțit, durch = prin/la.', eg:'Zwölf geteilt durch drei ist vier.',egRo:'Doisprezece împărțit la trei este patru.'},
+    {de:'ist gleich (=)',  ro:'este egal cu',      emoji:'🟰', tip:'„gleich" = egal/la fel. Ist gleich = este egal.', eg:'Fünf plus drei ist gleich acht.',egRo:'Cinci plus trei este egal cu opt.'},
+    {de:'Wie viel ist ...?', ro:'Cât face ...?',   emoji:'❓', eg:'Wie viel ist sieben plus fünf?',egRo:'Cât face șapte plus cinci?'},
+    {de:'das Ergebnis',    ro:'rezultatul',        emoji:'✅', eg:'Das Ergebnis ist zwölf.',egRo:'Rezultatul este doisprezece.'},
+    {de:'die Zahl',        ro:'numărul / cifra',   emoji:'🔢', tip:'„Zahl" = număr. „Zahlen" = și „a plăti" (cu numere)!'},
+    {de:'gerade Zahl',     ro:'număr par',         emoji:'2️⃣', tip:'„gerade" = par SAU drept. Contextul contează!', eg:'Zwei, vier und sechs sind gerade Zahlen.',egRo:'Doi, patru și șase sunt numere pare.'},
+    {de:'ungerade Zahl',   ro:'număr impar',       emoji:'1️⃣', tip:'un- (prefix negativ) + gerade = impar.', eg:'Eins, drei und fünf sind ungerade.',egRo:'Unu, trei și cinci sunt impare.'},
+    {de:'größer als (>)',  ro:'mai mare decât',    emoji:'📈', eg:'Fünf ist größer als drei.',egRo:'Cinci este mai mare decât trei.'},
+    {de:'kleiner als (<)', ro:'mai mic decât',     emoji:'📉', eg:'Zwei ist kleiner als vier.',egRo:'Doi este mai mic decât patru.'},
+  ],
+  mathProblems:[
+    {q:'Wie viel ist\n3 + 4?',    hint:'drei plus vier',   a:'sieben',    opts:['sechs','sieben','acht','fünf']},
+    {q:'Wie viel ist\n10 − 4?',   hint:'zehn minus vier',  a:'sechs',     opts:['fünf','sieben','sechs','acht']},
+    {q:'Wie viel ist\n3 × 4?',    hint:'drei mal vier',    a:'zwölf',     opts:['elf','zwölf','dreizehn','zehn']},
+    {q:'Wie viel ist\n12 ÷ 3?',   hint:'zwölf geteilt durch drei', a:'vier', opts:['drei','vier','fünf','sechs']},
+    {q:'Wie viel ist\n7 + 8?',    hint:'sieben plus acht', a:'fünfzehn',  opts:['vierzehn','fünfzehn','sechzehn','dreizehn']},
+    {q:'Wie viel ist\n20 − 7?',   hint:'zwanzig minus sieben', a:'dreizehn', opts:['zwölf','vierzehn','dreizehn','elf']},
+    {q:'Wie viel ist\n5 × 3?',    hint:'fünf mal drei',    a:'fünfzehn',  opts:['zwölf','fünfzehn','achtzehn','zehn']},
+    {q:'Wie viel ist\n16 ÷ 4?',   hint:'sechzehn geteilt durch vier', a:'vier', opts:['drei','fünf','vier','sechs']},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   LEKTION 17 — RECHNEN 2 (Textaufgaben / Probleme)
+   ════════════════════════════════════════════════════ */
+{
+  id:17,type:'math',emoji:'📐',title:'Rechnen 2',titleRo:'Probleme matematice cu texte',level:'A2',color:'#8B5CF6',
+  vocab:[
+    {de:'das Geld',         ro:'banii',                  emoji:'💰', tip:'„Geld" = bani. Pronunță: GELT.', eg:'Ich habe zehn Euro.',egRo:'Am zece euro.'},
+    {de:'der Euro',         ro:'euro (€)',               emoji:'💶', eg:'Das kostet fünf Euro.',egRo:'Asta costă cinci euro.'},
+    {de:'der Cent',         ro:'cent (¢)',               emoji:'🪙', eg:'Fünfzig Cent.',egRo:'Cincizeci de cenți.'},
+    {de:'bezahlen',         ro:'a plăti',                emoji:'💳', tip:'„zahlen" = a plăti / a număra. Bezahlen = a achita.', eg:'Ich bezahle zwanzig Euro.',egRo:'Plătesc douăzeci de euro.'},
+    {de:'das Wechselgeld',  ro:'restul (la plată)',      emoji:'🔄', tip:'Wechsel (schimb) + Geld (bani) = bani de schimb!', eg:'Das Wechselgeld ist drei Euro.',egRo:'Restul este trei euro.'},
+    {de:'teuer',            ro:'scump',                  emoji:'💸', eg:'Das Auto ist sehr teuer.',egRo:'Mașina este foarte scumpă.'},
+    {de:'billig',           ro:'ieftin',                 emoji:'🏷️', eg:'Das Brot ist billig.',egRo:'Pâinea este ieftină.'},
+    {de:'die Hälfte',       ro:'jumătatea (½)',          emoji:'½', tip:'halb = jumătate. Die Hälfte = jumătatea.', eg:'Die Hälfte von zehn ist fünf.',egRo:'Jumătatea din zece este cinci.'},
+    {de:'das Doppelte',     ro:'dublul (×2)',            emoji:'2️⃣', tip:'doppelt = dublu. Das Doppelte = de două ori mai mult!', eg:'Das Doppelte von vier ist acht.',egRo:'Dublul lui patru este opt.'},
+    {de:'insgesamt',        ro:'în total',               emoji:'🔢', tip:'in (în) + gesamt (total) = în total!', eg:'Insgesamt kostet es zwölf Euro.',egRo:'În total costă doisprezece euro.'},
+    {de:'wie viele?',       ro:'câte? / câți?',          emoji:'❓', eg:'Wie viele Äpfel hast du?',egRo:'Câți meri ai?'},
+    {de:'das Ergebnis',     ro:'rezultatul',             emoji:'✅', eg:'Das Ergebnis ist richtig.',egRo:'Rezultatul este corect.'},
+  ],
+  mathProblems:[
+    {q:'Du kaufst 3 Brote\nfür je 2 Euro.\nWas zahlst du insgesamt?', hint:'3 × 2 = ?', a:'sechs Euro', opts:['fünf Euro','sechs Euro','sieben Euro','vier Euro']},
+    {q:'Du hast 20 Euro.\nDu kaufst etwas für 13 Euro.\nWie viel Wechselgeld bekommst du?', hint:'20 − 13 = ?', a:'sieben Euro', opts:['sieben Euro','sechs Euro','acht Euro','neun Euro']},
+    {q:'In der Klasse sind\n12 Schüler. Die Hälfte\nsind Mädchen. Wie viele?', hint:'12 ÷ 2 = ?', a:'sechs', opts:['vier','fünf','sechs','sieben']},
+    {q:'Ein Kaffee kostet\n3 Euro. Du kaufst\n4 Kaffees. Was kostet das?', hint:'3 × 4 = ?', a:'zwölf Euro', opts:['zehn Euro','elf Euro','zwölf Euro','dreizehn Euro']},
+    {q:'Was ist das Doppelte\nvon 9?', hint:'9 × 2 = ?', a:'achtzehn', opts:['sechzehn','siebzehn','achtzehn','neunzehn']},
+    {q:'Du hast 15 Äpfel.\nDu gibst 6 davon weg.\nWie viele hast du noch?', hint:'15 − 6 = ?', a:'neun', opts:['acht','neun','zehn','sieben']},
+    {q:'Ein Ticket kostet\n8 Euro. Du kaufst\n2 Tickets. Was zahlst du?', hint:'8 × 2 = ?', a:'sechzehn Euro', opts:['vierzehn Euro','fünfzehn Euro','sechzehn Euro','achtzehn Euro']},
+    {q:'Wie viel ist\n5 + 7 + 3?', hint:'Schritt für Schritt!', a:'fünfzehn', opts:['vierzehn','fünfzehn','sechzehn','dreizehn']},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   LEKTION 18 — IM AUTO (Teile & Bedienung)
+   ════════════════════════════════════════════════════ */
+{
+  id:18,type:'fahrschule',emoji:'🚗',title:'Im Auto',titleRo:'În mașină — Piese & comenzi',level:'B1',color:'#D97706',
+  vocab:[
+    {de:'das Lenkrad',         ro:'volanul',                  emoji:'🎡', tip:'Lenk (a conduce) + Rad (roată) = volanul!', eg:'Ich halte das Lenkrad fest.',egRo:'Țin volanul strâns.'},
+    {de:'das Gaspedal',        ro:'pedala de accelerație',    emoji:'🦶', tip:'Gas (gaz) + Pedal (pedală). Dreapta jos!', eg:'Ich trete das Gaspedal.',egRo:'Apăs pedala de accelerație.'},
+    {de:'die Bremse',          ro:'frâna',                    emoji:'🛑', tip:'bremsen = a frâna. Pedala din mijloc!', eg:'Die Bremse funktioniert gut.',egRo:'Frâna funcționează bine.'},
+    {de:'die Kupplung',        ro:'ambreiajul',               emoji:'⚙️', tip:'Apasă înainte de a schimba viteza! Stânga jos.', eg:'Tritt die Kupplung!',egRo:'Apasă ambreiajul!'},
+    {de:'der Blinker',         ro:'semnalizatorul',           emoji:'🔦', tip:'blinken = a clipi/a semnaliza. Întotdeauna obligatoriu!', eg:'Setze den Blinker links!',egRo:'Pune semnalizatorul la stânga!'},
+    {de:'der Sicherheitsgurt', ro:'centura de siguranță',     emoji:'🔒', tip:'Sicher (sigur) + Gurt (curea). Obligatoriu!', eg:'Gurt anlegen ist Pflicht.',egRo:'Purtarea centurii este obligatorie.'},
+    {de:'der Rückspiegel',     ro:'oglinda retrovizoare',     emoji:'🪞', tip:'Rück (spate) + Spiegel (oglindă). Verifică mereu!', eg:'Blick in den Rückspiegel!',egRo:'Privește în oglinda retrovizoare!'},
+    {de:'der Seitenspiegel',   ro:'oglinda laterală',         emoji:'🔭', tip:'Seiten (lateral) + Spiegel (oglindă). Stânga și dreapta!', eg:'Stelle die Seitenspiegel ein.',egRo:'Reglează oglinzile laterale.'},
+    {de:'der Scheibenwischer', ro:'ștergătorul de parbriz',   emoji:'🌧️', tip:'Scheibe (sticlă) + Wischer (ștergător). La ploaie!', eg:'Die Scheibenwischer laufen.',egRo:'Ștergătoarele funcționează.'},
+    {de:'die Motorhaube',      ro:'capota motorului',         emoji:'🔧', tip:'Motor + Haube (capac). Deschide pentru verificări!', eg:'Öffne die Motorhaube.',egRo:'Deschide capota.'},
+    {de:'die Hupe',            ro:'claxonul',                 emoji:'📯', tip:'hupen = a claxona. Folosiți cu moderație!', eg:'Hupe nur bei Gefahr!',egRo:'Claxonează doar în caz de pericol!'},
+    {de:'der Tacho',           ro:'vitezometrul',             emoji:'🏎️', tip:'Prescurtare: Tachometer. Arată viteza în km/h.', eg:'Der Tacho zeigt 50 km/h.',egRo:'Vitezometrul arată 50 km/h.'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   LEKTION 19 — VERKEHRSZEICHEN (Schilder)
+   ════════════════════════════════════════════════════ */
+{
+  id:19,type:'fahrschule',emoji:'🚦',title:'Verkehrszeichen',titleRo:'Semne de circulație',level:'B1',color:'#EF4444',
+  vocab:[
+    {de:'das Stoppschild',         ro:'semnul Stop',              emoji:'🛑', tip:'Cel mai important semn! Oprire completă obligatorie!', eg:'Am Stoppschild muss man anhalten.',egRo:'La semnul Stop trebuie să oprești complet.'},
+    {de:'Vorfahrt gewähren',       ro:'acordă prioritate',        emoji:'⬇️', tip:'Triunghi alb cu roșu. Lasă ceilalți să treacă!', eg:'Hier muss ich Vorfahrt gewähren.',egRo:'Aici trebuie să acord prioritate.'},
+    {de:'die Einbahnstraße',       ro:'strada cu sens unic',      emoji:'↗️', tip:'Ein (unu) + Bahn (cale). O singură direcție!', eg:'Das ist eine Einbahnstraße.',egRo:'Aceasta este o stradă cu sens unic.'},
+    {de:'Parken verboten',         ro:'parcare interzisă',        emoji:'🚫', tip:'Cerc albastru cu P tăiat. Nicio oprire pentru parcare!', eg:'Hier ist Parken verboten.',egRo:'Parcarea este interzisă aici.'},
+    {de:'die Höchstgeschwindigkeit',ro:'limita de viteză',         emoji:'🔢', tip:'Cerc roșu cu număr. Limita maximă legală!', eg:'Die Höchstgeschwindigkeit beträgt 50.',egRo:'Limita de viteză este 50 km/h.'},
+    {de:'die Vorfahrtstraße',      ro:'drumul cu prioritate',     emoji:'🔶', tip:'Romb galben = ai prioritate pe tot drumul!', eg:'Das ist eine Vorfahrtstraße.',egRo:'Acesta este un drum cu prioritate.'},
+    {de:'der Fußgängerüberweg',    ro:'trecerea de pietoni',      emoji:'🚶', tip:'Fußgänger (pieton) + Überweg (trecere). Pietonii au prioritate!', eg:'An jedem Zebrastreifen anhalten.',egRo:'Oprește la fiecare trecere de pietoni.'},
+    {de:'die Ampel',               ro:'semaforul',                emoji:'🚦', tip:'Rot = stop, Gelb = atenție, Grün = mergi!', eg:'Die Ampel zeigt Rot.',egRo:'Semaforul arată roșu.'},
+    {de:'das Überholverbot',       ro:'depășire interzisă',       emoji:'🚫', tip:'Cerc cu două mașini. Rămâi în spatele vehiculului din față!', eg:'Überholverbot gilt auf dieser Strecke.',egRo:'Depășirea este interzisă pe acest tronson.'},
+    {de:'die Umleitung',           ro:'devierea / ocol',          emoji:'🔄', tip:'Um (în jur) + Leitung (conducere) = ocolire!', eg:'Folge der Umleitung!',egRo:'Urmează devierea!'},
+    {de:'Achtung! Vorsicht!',      ro:'Atenție! Precauție!',      emoji:'⚠️', tip:'Achtung = atenție imediată. Vorsicht = precauție generală.', eg:'Achtung — Gefahr!',egRo:'Atenție — pericol!'},
+    {de:'das Verkehrszeichen',     ro:'semnul de circulație',     emoji:'🪧', tip:'Verkehr (trafic) + Zeichen (semn). Cunoaște toate!', eg:'Kenne alle Verkehrszeichen!',egRo:'Cunoaște toate semnele de circulație!'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   LEKTION 20 — VERKEHRSREGELN (Regeln)
+   ════════════════════════════════════════════════════ */
+{
+  id:20,type:'fahrschule',emoji:'📋',title:'Verkehrsregeln',titleRo:'Regulile de circulație',level:'B1',color:'#059669',
+  vocab:[
+    {de:'Rechts vor links',        ro:'dreapta față de stânga',   emoji:'➡️', tip:'Fără semne = vehiculele din dreapta au prioritate! Regulă de bază!', eg:'Rechts vor links gilt an Kreuzungen.',egRo:'Dreapta față de stânga se aplică la intersecții.'},
+    {de:'die Vorfahrt',            ro:'prioritatea',              emoji:'⭐', tip:'Vor (înainte) + Fahrt (drum) = dreptul de a merge primul!', eg:'Ich habe Vorfahrt.',egRo:'Am prioritate.'},
+    {de:'der Sicherheitsabstand',  ro:'distanța de siguranță',    emoji:'📏', tip:'La 100 km/h = minimum 50 metri față de mașina din față!', eg:'Halte den Sicherheitsabstand!',egRo:'Păstrează distanța de siguranță!'},
+    {de:'innerorts',               ro:'în localitate',            emoji:'🏘️', tip:'inner (interior) + Ort (localitate). Max 50 km/h!', eg:'Innerorts gilt 50 km/h.',egRo:'În localitate limita este 50 km/h.'},
+    {de:'außerorts',               ro:'în afara localității',     emoji:'🌳', tip:'außer (în afara) + Ort. Max 100 km/h pe drumuri naționale!', eg:'Außerorts gilt 100 km/h.',egRo:'În afara localității limita este 100 km/h.'},
+    {de:'die Autobahn',            ro:'autostrada',               emoji:'🛣️', tip:'Auto (mașină) + Bahn (cale). Recomandare 130 km/h, minimum 60 km/h!', eg:'Auf der Autobahn empfiehlt man 130 km/h.',egRo:'Pe autostradă se recomandă 130 km/h.'},
+    {de:'überholen',               ro:'a depăși',                 emoji:'🏎️', tip:'über (peste) + holen (a prelua). Verifică semnele și oglinzile!', eg:'Darf ich hier überholen?',egRo:'Pot depăși aici?'},
+    {de:'der Alkohol am Steuer',   ro:'alcool la volan',          emoji:'🚫', tip:'Limita: 0,5 Promille. Pentru tineri și începători: 0,0 Promille!', eg:'Alkohol am Steuer ist verboten.',egRo:'Alcoolul la volan este interzis.'},
+    {de:'die Geschwindigkeit',     ro:'viteza',                   emoji:'💨', tip:'geschwind = rapid. Adapteaz-o mereu la condiții!', eg:'Reduziere die Geschwindigkeit!',egRo:'Reduce viteza!'},
+    {de:'das Halteverbot',         ro:'oprire interzisă',         emoji:'🛑', tip:'Halt (oprire) + Verbot (interdicție). Nici 5 secunde!', eg:'Hier gilt absolutes Halteverbot.',egRo:'Oprirea este absolut interzisă aici.'},
+    {de:'anhalten',                ro:'a opri (complet)',          emoji:'✋', tip:'an (la) + halten (a ține) = a opri complet. La Stop și roșu!', eg:'Hier muss man anhalten!',egRo:'Aici trebuie să oprești!'},
+    {de:'Gurt anlegen!',           ro:'pune centura!',            emoji:'🔒', tip:'Gurt (curea) + anlegen (a pune). Obligatoriu pentru toți pasagerii!', eg:'Immer Gurt anlegen!',egRo:'Întotdeauna poartă centura!'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   LEKTION 21 — FAHRMANÖVER (Manöver)
+   ════════════════════════════════════════════════════ */
+{
+  id:21,type:'fahrschule',emoji:'🛣️',title:'Fahrmanöver',titleRo:'Manevre de conducere',level:'B1',color:'#6366F1',
+  vocab:[
+    {de:'anfahren',                ro:'a porni (mașina)',         emoji:'🚗', tip:'an (la) + fahren (a conduce) = a porni de pe loc.', eg:'Jetzt fahren wir an!',egRo:'Acum pornim!'},
+    {de:'bremsen',                 ro:'a frâna',                  emoji:'🛑', tip:'Bremse = frâna. Frânează lin, nu brusc!', eg:'Vorsichtig bremsen!',egRo:'Frânează cu grijă!'},
+    {de:'einparken',               ro:'a parca (a intra)',         emoji:'🅿️', tip:'ein (a intra) + parken (a parca). Verific oglinzile!', eg:'Hier kann ich einparken.',egRo:'Pot parca aici.'},
+    {de:'ausparken',               ro:'a ieși din parcare',       emoji:'↪️', tip:'aus (a ieși) + parken. Atenție la pietoni și bicicliști!', eg:'Beim Ausparken Vorsicht!',egRo:'Atenție când ieși din parcare!'},
+    {de:'wenden',                  ro:'a întoarce mașina',        emoji:'🔄', tip:'wenden = a întoarce complet (180°). Verifică traficul!', eg:'Darf ich hier wenden?',egRo:'Pot întoarce mașina aici?'},
+    {de:'rechts abbiegen',         ro:'a vira la dreapta',        emoji:'➡️', tip:'abbiegen = a vira. Atenție la bicicliști și pietoni!', eg:'Ich biege rechts ab.',egRo:'Virez la dreapta.'},
+    {de:'links abbiegen',          ro:'a vira la stânga',         emoji:'⬅️', tip:'Viraj la stânga = atenție la traficul din față!', eg:'Ich biege links ab.',egRo:'Virez la stânga.'},
+    {de:'der Kreisverkehr',        ro:'sensul giratoriu',         emoji:'🔵', tip:'Kreis (cerc) + Verkehr (trafic). Cei din giratoriu au prioritate!', eg:'Im Kreisverkehr hat man Vorfahrt.',egRo:'Cei din giratoriu au prioritate.'},
+    {de:'rückwärts fahren',        ro:'a conduce cu spatele',     emoji:'⬆️', tip:'rückwärts = înapoi. Verifică TOATE oglinzile + spatele!', eg:'Langsam rückwärts fahren!',egRo:'Conduce cu spatele ușor!'},
+    {de:'der Spurwechsel',         ro:'schimbarea benzii',        emoji:'🔀', tip:'Spur (bandă) + Wechsel (schimbare). Blinker OBLIGATORIU!', eg:'Vor dem Spurwechsel Blinker setzen!',egRo:'Înainte de schimbarea benzii, semnalizează!'},
+    {de:'die Kurve',               ro:'curba',                    emoji:'〰️', tip:'În curbă reduce viteza și rămâi pe banda ta!', eg:'In der Kurve langsam fahren!',egRo:'Conduce încet în curbă!'},
+    {de:'die Geschwindigkeit anpassen', ro:'a adapta viteza',    emoji:'📉', tip:'anpassen = a adapta. Vreme rea = viteză mai mică!', eg:'Passe die Geschwindigkeit an!',egRo:'Adaptează viteza!'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   LEKTION 22 — FÜHRERSCHEINPRÜFUNG (Prüfungsvorbereitung)
+   ════════════════════════════════════════════════════ */
+{
+  id:22,type:'fahrschule',emoji:'📝',title:'Führerscheinprüfung',titleRo:'Examenul pentru permis',level:'B1',color:'#DC2626',
+  vocab:[
+    {de:'die Fahrprüfung',         ro:'examenul de conducere',    emoji:'📝', tip:'Fahr (condus) + Prüfung (examen). Teoria + practica!', eg:'Ich mache die Fahrprüfung.',egRo:'Dau examenul de conducere.'},
+    {de:'der Führerschein',        ro:'permisul de conducere',    emoji:'🪪', tip:'Führ (conduce) + Schein (dovadă). Cel mai important document!', eg:'Ich habe den Führerschein bestanden!',egRo:'Am luat permisul!'},
+    {de:'der Prüfer',              ro:'examinatorul',             emoji:'👨‍💼', tip:'prüfen = a examina. Prüfer = cel care te evaluează.', eg:'Der Prüfer ist streng.',egRo:'Examinatorul este strict.'},
+    {de:'bestehen',                ro:'a promova (examenul)',     emoji:'✅', tip:'Bestanden = promovat! Das Ziel!', eg:'Ich habe die Prüfung bestanden!',egRo:'Am promovat examenul!'},
+    {de:'durchfallen',             ro:'a pica (examenul)',        emoji:'❌', tip:'durch (prin) + fallen (a cădea) = a pica. Poți repeta!', eg:'Ich bin durchgefallen.',egRo:'Am picat examenul.'},
+    {de:'die Theorie',             ro:'teoria',                   emoji:'📚', tip:'Identic cu românescul! Teorieprüfung = examen teoretic la calculator.', eg:'Die Theorie muss man lernen.',egRo:'Teoria trebuie învățată.'},
+    {de:'die Praxis',              ro:'practica',                 emoji:'🚗', tip:'Identic cu românescul! Praktische Prüfung = proba practică pe șosea.', eg:'Die Praxis ist sehr wichtig.',egRo:'Practica este foarte importantă.'},
+    {de:'der Fahrschüler',         ro:'elevul de la autoșcoală',  emoji:'🧑‍🎓', tip:'Fahr (condus) + Schüler (elev). Eu sunt Fahrschüler!', eg:'Ich bin Fahrschüler.',egRo:'Sunt cursant la autoșcoală.'},
+    {de:'sicher fahren',           ro:'a conduce în siguranță',   emoji:'🛡️', tip:'sicher = sigur. Das wichtigste Ziel beim Fahren!', eg:'Immer sicher fahren!',egRo:'Conduce întotdeauna în siguranță!'},
+    {de:'der Fehler',              ro:'greșeala',                 emoji:'⚠️', tip:'Schwerer Fehler (eroare gravă) = examen picat! Atenție maximă!', eg:'Mache keinen Fehler!',egRo:'Nu face greșeli!'},
+    {de:'die Verkehrsregeln',      ro:'regulile de circulație',   emoji:'📖', tip:'Cunoaște-le toate pe dinafară pentru examen!', eg:'Kenne alle Verkehrsregeln!',egRo:'Cunoaște toate regulile de circulație!'},
+    {de:'Viel Erfolg!',            ro:'Mult succes!',             emoji:'🍀', tip:'Erfolg = succes. Viel Erfolg = Mult succes! Spune asta înainte de examen!', eg:'Viel Erfolg bei der Prüfung!',egRo:'Mult succes la examen!'},
+  ],
+  mathProblems:[
+    {q:'Wie hoch ist die zulässige\nHöchstgeschwindigkeit innerorts?',   hint:'In der Stadt / im Dorf', a:'50 km/h', opts:['30 km/h','50 km/h','70 km/h','100 km/h']},
+    {q:'Was gilt an einer Kreuzung\nohne Verkehrszeichen?',              hint:'Kein Schild = welche Grundregel?', a:'Rechts vor links', opts:['Links vor rechts','Rechts vor links','Vorfahrt gewähren','Stopp']},
+    {q:'Ab welchem Promillewert\nist Fahren verboten?',                  hint:'Für erfahrene Fahrer (ab 21 J.)', a:'0,5 Promille', opts:['0,0 Promille','0,3 Promille','0,5 Promille','0,8 Promille']},
+    {q:'Was bedeutet\nrotes Licht an der Ampel?',                       hint:'Rot = ?', a:'Anhalten — Stop!', opts:['Langsam fahren','Abbiegen erlaubt','Anhalten — Stop!','Blinker setzen']},
+    {q:'Welche Geschwindigkeit ist auf\nder Autobahn empfohlen?',        hint:'Empfehlung, keine Pflicht!', a:'130 km/h', opts:['100 km/h','120 km/h','130 km/h','150 km/h']},
+    {q:'Welche Nummer rufst du\nbei einem Unfall an?',                   hint:'Europäischer Notruf', a:'112 (Notruf)', opts:['110 (Polizei)','112 (Notruf)','118','911']},
+    {q:'Wann muss man\nden Blinker setzen?',                             hint:'Vor welchen Manövern?', a:'Vor Abbiegen & Spurwechsel', opts:['Nur beim Abbiegen','Nur auf Autobahn','Vor Abbiegen & Spurwechsel','Beim Bremsen']},
+    {q:'Was ist der Mindestabstand\nbei 100 km/h?',                      hint:'Faustregel: halbe Tacho-Zahl in Metern', a:'50 Meter', opts:['30 Meter','50 Meter','100 Meter','20 Meter']},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   ENGLEZĂ — LECȚIA 101: GREETINGS
+   ════════════════════════════════════════════════════ */
+{
+  id:101,emoji:'👋',title:'Greetings',titleRo:'Salutări și expresii de bază',level:'A1',color:'#0284C7',
+  vocab:[
+    {de:'Hello',           ro:'Salut / Bună',        emoji:'👋', tip:'Cel mai universal salut. Pronunță: he-LĂU.', eg:'Hello! How are you?',egRo:'Salut! Ce mai faci?'},
+    {de:'Good morning',    ro:'Bună dimineața',      emoji:'🌅', tip:'„Good" = bun, „morning" = dimineață. Se folosește până la prânz.'},
+    {de:'Good evening',    ro:'Bună seara',          emoji:'🌆', tip:'„Evening" = seară. Pronunță: IIV-ning.'},
+    {de:'Good night',      ro:'Noapte bună',         emoji:'🌙', tip:'Doar la culcare sau la despărțire seara târziu!'},
+    {de:'Goodbye',         ro:'La revedere',         emoji:'🙋', tip:'Scurt: „Bye!" — informal și foarte des folosit.', eg:'Goodbye! See you tomorrow!',egRo:'La revedere! Ne vedem mâine!'},
+    {de:'Please',          ro:'Te rog / Vă rog',     emoji:'🙏', tip:'Pronunță: PLIIZ. Englezii îl folosesc FOARTE des — fii politicos!'},
+    {de:'Thank you',       ro:'Mulțumesc',           emoji:'😊', tip:'Scurt: „Thanks!". Răspunsul: „You\'re welcome!" (Cu plăcere!)', eg:'Thank you very much!',egRo:'Mulțumesc foarte mult!'},
+    {de:'Yes',             ro:'Da',                  emoji:'✅', eg:'Yes, of course!',egRo:'Da, desigur!'},
+    {de:'No',              ro:'Nu',                  emoji:'❌', eg:'No, thank you.',egRo:'Nu, mulțumesc.'},
+    {de:'Excuse me',       ro:'Scuzați-mă',          emoji:'🙇', tip:'Pentru a atrage atenția politicos. Pronunță: ex-KIUZ mi.'},
+    {de:'How are you?',    ro:'Ce mai faci?',        emoji:'❓', tip:'Răspuns standard: „I\'m fine, thanks!" (Sunt bine, mersi!)', eg:'Hi! How are you?',egRo:'Bună! Ce mai faci?'},
+    {de:'My name is...',   ro:'Mă numesc...',        emoji:'🪪', eg:'My name is Andrei.',egRo:'Mă numesc Andrei.'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   ENGLEZĂ — LECȚIA 102: NUMBERS
+   ════════════════════════════════════════════════════ */
+{
+  id:102,emoji:'🔢',title:'Numbers 1–20',titleRo:'Numerele de la 1 la 20',level:'A1',color:'#0D9488',
+  vocab:[
+    {de:'one',     ro:'unu (1)',           emoji:'1️⃣', tip:'Pronunță: UAN.'},
+    {de:'two',     ro:'doi (2)',           emoji:'2️⃣', tip:'Pronunță: TU — exact ca „tu" în română!'},
+    {de:'three',   ro:'trei (3)',          emoji:'3️⃣', tip:'TH-ul se pronunță cu limba între dinți: THRII. Seamănă cu „trei"!'},
+    {de:'four',    ro:'patru (4)',         emoji:'4️⃣', tip:'Pronunță: FOR.'},
+    {de:'five',    ro:'cinci (5)',         emoji:'5️⃣', tip:'Pronunță: FAIV.'},
+    {de:'six',     ro:'șase (6)',          emoji:'6️⃣', tip:'Aproape ca în germană (sechs)!'},
+    {de:'seven',   ro:'șapte (7)',         emoji:'7️⃣', tip:'Pronunță: SE-văn. Începe cu S ca „șapte"!'},
+    {de:'eight',   ro:'opt (8)',           emoji:'8️⃣', tip:'Pronunță: EIT. Scrierea e ciudată, dar rostirea e simplă!'},
+    {de:'nine',    ro:'nouă (9)',          emoji:'9️⃣', tip:'Pronunță: NAIN. Începe cu N ca „nouă"!'},
+    {de:'ten',     ro:'zece (10)',         emoji:'🔟', tip:'Pronunță: TEN.'},
+    {de:'eleven',  ro:'unsprezece (11)',   emoji:'🔢', tip:'Pronunță: i-LE-văn.'},
+    {de:'twelve',  ro:'doisprezece (12)',  emoji:'🔢', tip:'Pronunță: TUELV.'},
+    {de:'fifteen', ro:'cincisprezece (15)',emoji:'🔢', tip:'13–19 se termină în „-teen": thirteen, fourteen, fifteen…'},
+    {de:'twenty',  ro:'douăzeci (20)',     emoji:'💯', tip:'Pronunță: TUEN-ti.'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   ENGLEZĂ — LECȚIA 103: COLOURS
+   ════════════════════════════════════════════════════ */
+{
+  id:103,emoji:'🎨',title:'Colours',titleRo:'Culori',level:'A1',color:'#E11D48',
+  vocab:[
+    {de:'red',     ro:'roșu',      emoji:'🔴', tip:'Scurt și simplu: RED.'},
+    {de:'blue',    ro:'albastru',  emoji:'🔵', tip:'Pronunță: BLU — ca „bleu" în franceză, cunoscut și în română!'},
+    {de:'green',   ro:'verde',     emoji:'🟢', tip:'Pronunță: GRIIN.'},
+    {de:'yellow',  ro:'galben',    emoji:'🟡', tip:'Pronunță: IE-lău.'},
+    {de:'black',   ro:'negru',     emoji:'⚫', tip:'Pronunță: BLEC.'},
+    {de:'white',   ro:'alb',       emoji:'⚪', tip:'Pronunță: UAIT. W-ul englezesc = ca „u" scurt.'},
+    {de:'orange',  ro:'portocaliu',emoji:'🟠', tip:'Identic cu fructul! Oranj — cunoscut și în română.'},
+    {de:'pink',    ro:'roz',       emoji:'🩷', tip:'Pronunță: PINC.'},
+    {de:'brown',   ro:'maro',      emoji:'🟤', tip:'Pronunță: BRAUN — exact ca în germană!'},
+    {de:'grey',    ro:'gri',       emoji:'🩶', tip:'Pronunță: GREI. Aproape identic cu „gri"!'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   ENGLEZĂ — LECȚIA 104: FAMILY
+   ════════════════════════════════════════════════════ */
+{
+  id:104,emoji:'👨‍👩‍👧',title:'Family',titleRo:'Familia',level:'A1',color:'#9333EA',
+  vocab:[
+    {de:'family',      ro:'familie',  emoji:'👨‍👩‍👧‍👦', tip:'FAMILY ↔ FAMILIE — aproape identic! Pronunță: FEM-i-li.', eg:'I love my family.',egRo:'Îmi iubesc familia.'},
+    {de:'mother',      ro:'mamă',     emoji:'👩', tip:'Informal: „mum" (UK) sau „mom" (US).'},
+    {de:'father',      ro:'tată',     emoji:'👨', tip:'Informal: „dad". Pronunță: FA-dhăr.'},
+    {de:'brother',     ro:'frate',    emoji:'👦', tip:'Pronunță: BRA-dhăr. Seamănă cu „frate" la sens!'},
+    {de:'sister',      ro:'soră',     emoji:'👧', tip:'Pronunță: SIS-tăr. S-S ca „soră"!'},
+    {de:'son',         ro:'fiu',      emoji:'🧒', tip:'Pronunță: SAN — ca „soare" (sun)! Aceeași pronunție.'},
+    {de:'daughter',    ro:'fiică',    emoji:'👧', tip:'Pronunță: DO-tăr. GH-ul e mut!'},
+    {de:'grandmother', ro:'bunică',   emoji:'👵', tip:'„grand" + mother = bunica. Informal: „granny" sau „grandma".'},
+    {de:'grandfather', ro:'bunic',    emoji:'👴', tip:'Informal: „grandpa". Pronunță: GREND-fa-dhăr.'},
+    {de:'husband',     ro:'soț',      emoji:'🤵', tip:'Pronunță: HAZ-bănd.'},
+    {de:'wife',        ro:'soție',    emoji:'👰', tip:'Pronunță: UAIF.', eg:'This is my wife, Elena.',egRo:'Aceasta este soția mea, Elena.'},
+    {de:'child',       ro:'copil',    emoji:'👶', tip:'Plural neregulat: children (copii). Pronunță: CIAILD.'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   ENGLEZĂ — LECȚIA 105: FOOD & DRINKS
+   ════════════════════════════════════════════════════ */
+{
+  id:105,emoji:'🍞',title:'Food & Drinks',titleRo:'Mâncare și băuturi',level:'A1',color:'#EA580C',
+  vocab:[
+    {de:'bread',     ro:'pâine',     emoji:'🍞', tip:'Pronunță: BRED.'},
+    {de:'water',     ro:'apă',       emoji:'💧', tip:'Pronunță: UO-tăr.', eg:'A glass of water, please.',egRo:'Un pahar cu apă, vă rog.'},
+    {de:'milk',      ro:'lapte',     emoji:'🥛', tip:'Pronunță: MILC.'},
+    {de:'coffee',    ro:'cafea',     emoji:'☕', tip:'COFFEE ↔ CAFEA — aproape identic! Pronunță: CO-fi.', eg:'I drink coffee every morning.',egRo:'Beau cafea în fiecare dimineață.'},
+    {de:'tea',       ro:'ceai',      emoji:'🍵', tip:'Pronunță: TII. Băutura națională a Angliei!'},
+    {de:'apple',     ro:'măr',       emoji:'🍎', tip:'Pronunță: E-păl.'},
+    {de:'meat',      ro:'carne',     emoji:'🥩', tip:'Pronunță: MIIT.'},
+    {de:'cheese',    ro:'brânză',    emoji:'🧀', tip:'Pronunță: CIIZ. Spui „cheese" și la poze — ca să zâmbești!'},
+    {de:'egg',       ro:'ou',        emoji:'🥚', tip:'Pronunță: EG.'},
+    {de:'sugar',     ro:'zahăr',     emoji:'🍬', tip:'Pronunță: ȘU-găr — cu Ș, nu cu S!'},
+    {de:'breakfast', ro:'mic dejun', emoji:'🍳', tip:'break + fast = „a rupe postul" de peste noapte!', eg:'Breakfast is at 7 o\'clock.',egRo:'Micul dejun este la ora 7.'},
+    {de:'hungry',    ro:'flămând',   emoji:'😋', tip:'Pronunță: HANG-gri.', eg:'I am hungry!',egRo:'Mi-e foame!'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   ENGLEZĂ — LECȚIA 106: DAYS & TIME
+   ════════════════════════════════════════════════════ */
+{
+  id:106,emoji:'📅',title:'Days & Time',titleRo:'Zilele și timpul',level:'A1',color:'#4F46E5',
+  vocab:[
+    {de:'Monday',    ro:'luni',      emoji:'1️⃣', tip:'„Moon-day" = ziua Lunii! Ca „luni" de la Lună!'},
+    {de:'Tuesday',   ro:'marți',     emoji:'2️⃣', tip:'Pronunță: TIUZ-dei.'},
+    {de:'Wednesday', ro:'miercuri',  emoji:'3️⃣', tip:'Pronunță: UENZ-dei — D-ul primul e mut!'},
+    {de:'Thursday',  ro:'joi',       emoji:'4️⃣', tip:'Pronunță: THĂRZ-dei.'},
+    {de:'Friday',    ro:'vineri',    emoji:'5️⃣', tip:'Pronunță: FRAI-dei. Toți iubesc Friday!'},
+    {de:'Saturday',  ro:'sâmbătă',   emoji:'6️⃣', tip:'Pronunță: SE-tăr-dei. Ziua lui Saturn!'},
+    {de:'Sunday',    ro:'duminică',  emoji:'7️⃣', tip:'„Sun-day" = ziua Soarelui!'},
+    {de:'today',     ro:'azi',       emoji:'📍', eg:'Today is Monday.',egRo:'Azi este luni.'},
+    {de:'tomorrow',  ro:'mâine',     emoji:'➡️', tip:'Pronunță: tă-MO-rău.', eg:'See you tomorrow!',egRo:'Ne vedem mâine!'},
+    {de:'yesterday', ro:'ieri',      emoji:'⬅️', tip:'Pronunță: IES-tăr-dei.'},
+    {de:'week',      ro:'săptămână', emoji:'📆', tip:'Pronunță: UIIC. Weekend = sfârșit de săptămână!'},
+    {de:'What time is it?', ro:'Cât e ceasul?', emoji:'🕐', eg:'What time is it? It\'s 3 o\'clock.',egRo:'Cât e ceasul? E ora 3.'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   ENGLEZĂ — LECȚIA 107: JOBS
+   ════════════════════════════════════════════════════ */
+{
+  id:107,emoji:'💼',title:'Jobs',titleRo:'Meserii',level:'A1',color:'#0F766E',
+  vocab:[
+    {de:'doctor',    ro:'doctor / medic', emoji:'🧑‍⚕️', tip:'DOCTOR ↔ DOCTOR — identic! Pronunță: DOC-tăr.'},
+    {de:'teacher',   ro:'profesor',       emoji:'🧑‍🏫', tip:'„teach" = a preda + „-er" = persoana. Pronunță: TII-ciăr.'},
+    {de:'driver',    ro:'șofer',          emoji:'🚗', tip:'„drive" = a conduce + „-er". Pronunță: DRAI-văr.', eg:'He is a bus driver.',egRo:'El este șofer de autobuz.'},
+    {de:'worker',    ro:'muncitor',       emoji:'👷', tip:'„work" = muncă + „-er". Pronunță: UĂR-căr.'},
+    {de:'engineer',  ro:'inginer',        emoji:'🧑‍🔧', tip:'ENGINEER ↔ INGINER — aproape identic! Pronunță: en-gi-NIIR.'},
+    {de:'cook',      ro:'bucătar',        emoji:'🧑‍🍳', tip:'Pronunță: CUC. „to cook" = a găti.'},
+    {de:'nurse',     ro:'asistentă medicală', emoji:'💉', tip:'Pronunță: NĂRS.'},
+    {de:'mechanic',  ro:'mecanic',        emoji:'🔧', tip:'MECHANIC ↔ MECANIC — identic! Pronunță: mi-CHE-nic.'},
+    {de:'shop assistant', ro:'vânzător', emoji:'🛒', tip:'„shop" = magazin + „assistant" = ajutor.'},
+    {de:'boss',      ro:'șef',            emoji:'🧑‍💼', tip:'Pronunță: BOS. Cuvânt folosit și în România!'},
+    {de:'job',       ro:'loc de muncă',   emoji:'💼', tip:'Pronunță: GIOB — cunoscut deja în română ca „job"!', eg:'I have a new job.',egRo:'Am un loc de muncă nou.'},
+    {de:'money',     ro:'bani',           emoji:'💰', tip:'Pronunță: MA-ni.', eg:'I earn money.',egRo:'Câștig bani.'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   ENGLEZĂ — LECȚIA 108: USEFUL PHRASES
+   ════════════════════════════════════════════════════ */
+{
+  id:108,emoji:'🗣️',title:'Useful Phrases',titleRo:'Expresii utile',level:'A1',color:'#BE185D',
+  vocab:[
+    {de:'I want...',            ro:'Vreau...',                emoji:'👉', eg:'I want a coffee, please.',egRo:'Vreau o cafea, vă rog.'},
+    {de:'I have...',            ro:'Am... / Eu am...',        emoji:'🤲', eg:'I have two children.',egRo:'Am doi copii.'},
+    {de:'Where is...?',         ro:'Unde este...?',           emoji:'📍', tip:'Pronunță: UER IZ. Întrebarea de aur când călătorești!', eg:'Where is the station?',egRo:'Unde este gara?'},
+    {de:'How much is it?',      ro:'Cât costă?',              emoji:'💶', tip:'La cumpărături — esențial!', eg:'How much is it? — Ten euros.',egRo:'Cât costă? — Zece euro.'},
+    {de:'I don\'t understand',  ro:'Nu înțeleg',              emoji:'🤷', tip:'Pronunță: ai dont an-dăr-STEND. Nimeni nu se supără!'},
+    {de:'Can you help me?',     ro:'Mă puteți ajuta?',        emoji:'🆘', tip:'„help" = ajutor — ca „Hilfe" în germană!', eg:'Excuse me, can you help me?',egRo:'Scuzați-mă, mă puteți ajuta?'},
+    {de:'I speak a little English', ro:'Vorbesc puțină engleză', emoji:'🗣️', tip:'Fraza care deschide orice conversație!'},
+    {de:'I\'m from Romania',    ro:'Sunt din România',        emoji:'🇷🇴', eg:'Hi! I\'m from Romania.',egRo:'Bună! Sunt din România.'},
+    {de:'Nice to meet you',     ro:'Încântat de cunoștință',  emoji:'🤝', tip:'Se spune la prima întâlnire. Pronunță: NAIS tu MIIT iu.'},
+    {de:'I don\'t know',        ro:'Nu știu',                 emoji:'🤔', tip:'Pronunță: ai dont NĂU. K-ul e mut!'},
+    {de:'See you later!',       ro:'Pe curând!',              emoji:'👋', tip:'Informal și prietenos. Scurt: „Later!"'},
+    {de:'Good luck!',           ro:'Mult succes!',            emoji:'🍀', eg:'Good luck with your new job!',egRo:'Mult succes la noul loc de muncă!'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   MESERIE / BERUF (201+) — Germană pe domenii de muncă
+   Toate modulele sunt deschise — fără lanț de deblocare!
+   ════════════════════════════════════════════════════ */
+{
+  id:201,emoji:'🏗️',title:'Baustelle',titleRo:'Pe șantier — construcții',level:'A1',color:'#D97706',
+  vocab:[
+    {de:'die Baustelle',    ro:'șantierul',            emoji:'🏗️', tip:'Bau (construcție) + Stelle (loc) = locul construcției.', eg:'Ich arbeite auf der Baustelle.',egRo:'Lucrez pe șantier.'},
+    {de:'der Helm',         ro:'casca',                emoji:'⛑️', tip:'Fără cască nu ai voie pe șantier — regulă de aur!', eg:'Trag deinen Helm!',egRo:'Poartă-ți casca!'},
+    {de:'Vorsicht!',        ro:'Atenție!',             emoji:'⚠️', tip:'Cel mai important cuvânt pe șantier. Reacționează imediat!', eg:'Vorsicht, das ist schwer!',egRo:'Atenție, e greu!'},
+    {de:'der Hammer',       ro:'ciocanul',             emoji:'🔨', tip:'Ca englezescul „hammer" — aceeași rădăcină.'},
+    {de:'die Bohrmaschine', ro:'bormașina',            emoji:'🪛', tip:'BOHRmaschine ↔ BORmașină — românescul vine din germană!'},
+    {de:'die Schaufel',     ro:'lopata',               emoji:'🥄'},
+    {de:'die Leiter',       ro:'scara (mobilă)',       emoji:'🪜', tip:'Atenție: DIE Leiter = scară, DER Leiter = șef/conducător!'},
+    {de:'das Gerüst',       ro:'schela',               emoji:'🏗️', eg:'Das Gerüst ist sicher.',egRo:'Schela este sigură.'},
+    {de:'der Beton',        ro:'betonul',              emoji:'🧱', tip:'Identic cu românescul „beton"! Origine franceză.'},
+    {de:'die Schubkarre',   ro:'roaba',                emoji:'🛒', tip:'schieben (a împinge) + Karre (cărucior) = căruciorul împins.'},
+    {de:'der Bauleiter',    ro:'șeful de șantier',     emoji:'👷', eg:'Der Bauleiter kommt gleich.',egRo:'Șeful de șantier vine imediat.'},
+    {de:'die Pause',        ro:'pauza',                emoji:'☕', tip:'Aproape identic cu „pauză"!', eg:'Wir machen eine Pause.',egRo:'Facem o pauză.'},
+    {de:'der Feierabend',   ro:'sfârșitul programului',emoji:'🌇', tip:'Cuvântul magic! „Feierabend!" = gata munca pe azi.', eg:'Endlich Feierabend!',egRo:'În sfârșit, am terminat lucrul!'},
+  ]
+},
+{
+  id:202,emoji:'🌾',title:'Erntearbeit',titleRo:'La recoltă — agricultură',level:'A1',color:'#65A30D',
+  vocab:[
+    {de:'die Ernte',        ro:'recolta',              emoji:'🌾', eg:'Die Ernte beginnt im Mai.',egRo:'Recolta începe în mai.'},
+    {de:'das Feld',         ro:'câmpul',               emoji:'🟩', tip:'Ca englezescul „field".', eg:'Wir arbeiten auf dem Feld.',egRo:'Lucrăm pe câmp.'},
+    {de:'der Traktor',      ro:'tractorul',            emoji:'🚜', tip:'Identic cu românescul „tractor"!'},
+    {de:'pflücken',         ro:'a culege',             emoji:'🤲', eg:'Wir pflücken Äpfel.',egRo:'Culegem mere.'},
+    {de:'reif',             ro:'copt / coaptă',        emoji:'🍓', eg:'Die Erdbeere ist reif.',egRo:'Căpșuna este coaptă.'},
+    {de:'die Erdbeere',     ro:'căpșuna',              emoji:'🍓', tip:'Erde (pământ) + Beere (boabă) = boaba de la pământ!'},
+    {de:'der Spargel',      ro:'sparanghelul',         emoji:'🥬', tip:'„Spargelzeit" (apr–iun) = sezonul cu cei mai mulți lucrători români!'},
+    {de:'die Kiste',        ro:'lada / cutia',         emoji:'📦', eg:'Die Kiste ist voll.',egRo:'Lada este plină.'},
+    {de:'der Korb',         ro:'coșul',                emoji:'🧺'},
+    {de:'das Gewächshaus',  ro:'sera',                 emoji:'🏡', tip:'wachsen (a crește) + Haus (casă) = casa unde cresc plantele.'},
+    {de:'die Handschuhe',   ro:'mănușile',             emoji:'🧤', tip:'Hand (mână) + Schuhe (pantofi) = „pantofii mâinilor"! 😄'},
+    {de:'die Schicht',      ro:'schimbul / tura',      emoji:'⏰', eg:'Ich arbeite in der Frühschicht.',egRo:'Lucrez în schimbul de dimineață.'},
+    {de:'das Wetter',       ro:'vremea',               emoji:'⛅', tip:'La câmp totul depinde de vreme!', eg:'Das Wetter ist gut heute.',egRo:'Vremea e bună azi.'},
+  ]
+},
+{
+  id:203,emoji:'🏢',title:'Büro',titleRo:'La birou — administrație',level:'A2',color:'#0284C7',
+  vocab:[
+    {de:'das Büro',         ro:'biroul',               emoji:'🏢', tip:'Din franceză „bureau" — ca și în română!'},
+    {de:'der Termin',       ro:'programarea',          emoji:'📅', tip:'FOARTE des folosit în Germania! Totul merge cu „Termin".', eg:'Ich habe einen Termin um 10 Uhr.',egRo:'Am o programare la ora 10.'},
+    {de:'die E-Mail',       ro:'e-mailul',             emoji:'📧', eg:'Ich schreibe eine E-Mail.',egRo:'Scriu un e-mail.'},
+    {de:'die Rechnung',     ro:'factura',              emoji:'🧾', eg:'Die Rechnung ist bezahlt.',egRo:'Factura este plătită.'},
+    {de:'der Vertrag',      ro:'contractul',           emoji:'📝', eg:'Bitte lesen Sie den Vertrag.',egRo:'Vă rog citiți contractul.'},
+    {de:'die Unterschrift', ro:'semnătura',            emoji:'✍️', tip:'unter (sub) + Schrift (scris) = scrisul de sub document.'},
+    {de:'der Drucker',      ro:'imprimanta',           emoji:'🖨️', tip:'drucken = a imprima. Drucker = cel care imprimă.'},
+    {de:'der Kunde',        ro:'clientul',             emoji:'🤝', eg:'Der Kunde hat eine Frage.',egRo:'Clientul are o întrebare.'},
+    {de:'die Besprechung',  ro:'ședința',              emoji:'👥', tip:'sprechen (a vorbi) → Besprechung = discuția împreună.'},
+    {de:'anrufen',          ro:'a suna (la telefon)',  emoji:'📞', eg:'Ich rufe Sie morgen an.',egRo:'Vă sun mâine.'},
+    {de:'der Ordner',       ro:'bibliorraftul / dosarul',emoji:'🗂️', tip:'Ordnung (ordine) → Ordner = cel care ține ordinea.'},
+    {de:'der Urlaub',       ro:'concediul',            emoji:'🏖️', tip:'Cuvântul preferat al tuturor angajaților! 😄', eg:'Ich nehme nächste Woche Urlaub.',egRo:'Îmi iau concediu săptămâna viitoare.'},
+    {de:'der Feiertag',     ro:'ziua liberă legală',   emoji:'🎉', tip:'feiern (a sărbători) + Tag (zi). Germania are multe Feiertage!'},
+  ]
+},
+{
+  id:204,emoji:'🏥',title:'Pflege',titleRo:'Îngrijire — domeniul medical',level:'A2',color:'#DC2626',
+  vocab:[
+    {de:'die Pflege',       ro:'îngrijirea',           emoji:'🤲', tip:'pflegen = a îngriji. Domeniu cu mare căutare în Germania!'},
+    {de:'der Patient',      ro:'pacientul',            emoji:'🛌', tip:'Identic cu românescul „pacient"!'},
+    {de:'die Medikamente',  ro:'medicamentele',        emoji:'💊', tip:'Aproape identic cu „medicamente"!', eg:'Die Medikamente sind wichtig.',egRo:'Medicamentele sunt importante.'},
+    {de:'das Krankenhaus',  ro:'spitalul',             emoji:'🏥', tip:'krank (bolnav) + Haus (casă) = casa bolnavilor.'},
+    {de:'die Krankenschwester',ro:'asistenta medicală',emoji:'👩‍⚕️', tip:'Schwester = soră — ca „sora medicală" în română!'},
+    {de:'der Rollstuhl',    ro:'scaunul cu rotile',    emoji:'🦽', tip:'rollen (a rula) + Stuhl (scaun) = scaunul care rulează.'},
+    {de:'das Pflegeheim',   ro:'căminul de bătrâni',   emoji:'🏡', eg:'Sie arbeitet im Pflegeheim.',egRo:'Ea lucrează la căminul de bătrâni.'},
+    {de:'helfen',           ro:'a ajuta',              emoji:'🤝', eg:'Kann ich Ihnen helfen?',egRo:'Pot să vă ajut?'},
+    {de:'waschen',          ro:'a spăla',              emoji:'🧼', tip:'Ca englezescul „wash".'},
+    {de:'das Fieber',       ro:'febra',                emoji:'🌡️', tip:'FIEBER ↔ FEBRĂ — aproape identic!', eg:'Der Patient hat Fieber.',egRo:'Pacientul are febră.'},
+    {de:'der Schmerz',      ro:'durerea',              emoji:'😣', eg:'Haben Sie Schmerzen?',egRo:'Aveți dureri? — întrebarea zilnică în îngrijire!'},
+    {de:'der Notfall',      ro:'urgența',              emoji:'🚨', tip:'Not (nevoie) + Fall (caz) = caz de nevoie. 112 = și în Germania!'},
+    {de:'die Nachtschicht', ro:'tura de noapte',       emoji:'🌙', tip:'Nacht (noapte) + Schicht (tură). Plătită mai bine!'},
+  ]
+},
+{
+  id:205,emoji:'📦',title:'Lager & Logistik',titleRo:'Depozit și logistică',level:'A1',color:'#7C3AED',
+  vocab:[
+    {de:'das Lager',        ro:'depozitul',            emoji:'🏬', eg:'Ich arbeite im Lager.',egRo:'Lucrez în depozit.'},
+    {de:'die Palette',      ro:'paletul',              emoji:'🟫', tip:'Identic cu românescul „palet"!'},
+    {de:'der Gabelstapler', ro:'motostivuitorul',      emoji:'🚜', tip:'Gabel (furculiță) + Stapler (stivuitor). Pentru el îți trebuie „Staplerschein" (permis)!'},
+    {de:'das Paket',        ro:'pachetul / coletul',   emoji:'📦', tip:'Aproape identic cu „pachet"!'},
+    {de:'die Lieferung',    ro:'livrarea',             emoji:'🚚', tip:'liefern ↔ a livra — aceeași origine!', eg:'Die Lieferung kommt heute.',egRo:'Livrarea vine azi.'},
+    {de:'das Regal',        ro:'raftul',               emoji:'🗄️', eg:'Das Paket steht im Regal.',egRo:'Coletul este pe raft.'},
+    {de:'scannen',          ro:'a scana',              emoji:'📲', tip:'Identic cu englezescul „scan"!'},
+    {de:'der Scanner',      ro:'scanerul',             emoji:'🔦'},
+    {de:'die Inventur',     ro:'inventarul',           emoji:'📋', tip:'INVENTUR ↔ INVENTAR — aproape identic!'},
+    {de:'schwer',           ro:'greu / grea',          emoji:'🏋️', eg:'Die Kiste ist sehr schwer.',egRo:'Lada este foarte grea.'},
+    {de:'heben',            ro:'a ridica',             emoji:'💪', tip:'Ridică corect: din picioare, nu din spate!', eg:'Bitte vorsichtig heben!',egRo:'Ridicați cu grijă, vă rog!'},
+    {de:'der LKW',          ro:'camionul',             emoji:'🚛', tip:'Lastkraftwagen — toți spun doar „LKW" (el-ka-ve).'},
+    {de:'die Rampe',        ro:'rampa',                emoji:'📐', tip:'Identic cu românescul „rampă"!'},
+  ]
+},
+{
+  id:206,emoji:'🍽️',title:'Gastronomie',titleRo:'Restaurant și bucătărie',level:'A1',color:'#DB2777',
+  vocab:[
+    {de:'die Küche',        ro:'bucătăria',            emoji:'🍳', eg:'Die Küche ist sauber.',egRo:'Bucătăria este curată.'},
+    {de:'der Kellner',      ro:'ospătarul',            emoji:'🤵', tip:'Keller = pivniță — pe vremuri aducea vinul din pivniță!'},
+    {de:'der Gast',         ro:'clientul / oaspetele', emoji:'🙋', eg:'Der Gast wartet.',egRo:'Clientul așteaptă.'},
+    {de:'die Speisekarte',  ro:'meniul',               emoji:'📖', tip:'Speise (mâncare) + Karte (card) = lista cu mâncăruri.'},
+    {de:'die Bestellung',   ro:'comanda',              emoji:'🧾', tip:'bestellen = a comanda.', eg:'Die Bestellung ist fertig!',egRo:'Comanda este gata!'},
+    {de:'der Teller',       ro:'farfuria',             emoji:'🍽️'},
+    {de:'das Besteck',      ro:'tacâmurile',           emoji:'🍴'},
+    {de:'das Glas',         ro:'paharul',              emoji:'🥛', tip:'Ca englezescul „glass".'},
+    {de:'die Spülmaschine', ro:'mașina de spălat vase',emoji:'🫧', tip:'spülen (a clăti) + Maschine. Prima treabă a multor începători!'},
+    {de:'sauber',           ro:'curat / curată',       emoji:'✨', eg:'Der Tisch ist sauber.',egRo:'Masa este curată.'},
+    {de:'schmutzig',        ro:'murdar / murdară',     emoji:'🧽', tip:'Opusul lui „sauber".'},
+    {de:'das Trinkgeld',    ro:'bacșișul',             emoji:'💶', tip:'trinken (a bea) + Geld (bani) = „bani de băut"! În Germania ~5–10%.'},
+    {de:'die Reservierung', ro:'rezervarea',           emoji:'📞', tip:'Aproape identic cu „rezervare"!', eg:'Haben Sie eine Reservierung?',egRo:'Aveți o rezervare?'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   IDENTITATE & ORIGINE (301-302) — Dialog-Format
+   ════════════════════════════════════════════════════ */
+{
+  id:301,emoji:'🗣️',title:'Prezentare Personală',titleRo:'Cine sunt și de unde vin',level:'A1',color:'#8B5CF6',
+  vocab:[
+    {de:'Guten Tag, mein Name ist...',   ro:'Bună, mă numesc...',            emoji:'👋', eg:'Guten Tag, mein Name ist Ana.',egRo:'Bună, mă numesc Ana.'},
+    {de:'Woher kommst du?',              ro:'De unde vii?',                   emoji:'🌍', eg:'Woher kommst du?',egRo:'De unde vii?'},
+    {de:'Ich komme aus Rumänien.',       ro:'Vin din România.',               emoji:'🇷🇴', eg:'Ich komme aus Rumänien.',egRo:'Vin din România.'},
+    {de:'Ich bin Rumäne.',               ro:'Sunt român.',                    emoji:'🇷🇴', eg:'Ich bin Rumäne.',egRo:'Sunt român.'},
+    {de:'Meine Muttersprache ist Rumänisch', ro:'Limba mea maternă este limba română', emoji:'🗣️'},
+    {de:'Was ist dein Beruf?',           ro:'Care este profesia ta?',         emoji:'💼', eg:'Was ist dein Beruf?',egRo:'Care este profesia ta?'},
+    {de:'Ich bin Ingenieur.',            ro:'Sunt inginer.',                  emoji:'👨‍💼', eg:'Ich bin Ingenieur.',egRo:'Sunt inginer.'},
+    {de:'Ich bin Elektrotechniker.',     ro:'Sunt electrician.',              emoji:'⚡'},
+    {de:'Ich bin Handwerker.',           ro:'Sunt meseriași.',                emoji:'🔨'},
+    {de:'Wo wohnst du?',                 ro:'Unde locuiești?',                emoji:'🏠', eg:'Wo wohnst du?',egRo:'Unde locuiești?'},
+    {de:'Ich wohne in München.',         ro:'Locuiesc în München.',           emoji:'🏠', eg:'Ich wohne in München.',egRo:'Locuiesc în München.'},
+    {de:'Ich wohne seit 2 Jahren hier.', ro:'Locuiesc aici de 2 ani.',        emoji:'📅'},
+    {de:'Wie alt bist du?',              ro:'Câți ani ai?',                   emoji:'🎂', eg:'Wie alt bist du?',egRo:'Câți ani ai?'},
+    {de:'Ich bin 35 Jahre alt.',         ro:'Am 35 de ani.',                  emoji:'🎂', eg:'Ich bin 35 Jahre alt.',egRo:'Am 35 de ani.'},
+  ]
+},
+{
+  id:302,emoji:'👨‍👩‍👧',title:'Familie & Status',titleRo:'Familie și stare civilă',level:'A1',color:'#EC4899',
+  vocab:[
+    {de:'Ich bin verheiratet.',          ro:'Sunt căsătorit.',                emoji:'💍', eg:'Ich bin verheiratet.',egRo:'Sunt căsătorit.'},
+    {de:'Ich bin ledig.',                ro:'Sunt necăsătorit.',              emoji:'💔', eg:'Ich bin ledig.',egRo:'Sunt necăsătorit.'},
+    {de:'Ich bin geschieden.',           ro:'Sunt divorțat.',                 emoji:'⚖️'},
+    {de:'Ich habe Kinder.',              ro:'Am copii.',                      emoji:'👨‍👩‍👧‍👦', eg:'Ich habe zwei Kinder.',egRo:'Am doi copii.'},
+    {de:'Ich habe einen Sohn und eine Tochter', ro:'Am un fiu și o fiică', emoji:'👦👧'},
+    {de:'Meine Familie lebt in Rumänien.', ro:'Familia mea locuiește în România.', emoji:'🇷🇴'},
+    {de:'Ich bin allein hier.',          ro:'Sunt singur aici.',              emoji:'🏠'},
+    {de:'Mein Mann / Meine Frau arbeitet auch hier', ro:'Soțul / Soția mea lucrează și aici', emoji:'💼'},
+    {de:'Meine Eltern sind noch in Rumänien', ro:'Părinții mei sunt încă în România', emoji:'👴👵'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   SĂNĂTATE & MEDIC (303-304) — Dialog-Format
+   ════════════════════════════════════════════════════ */
+{
+  id:303,emoji:'🏥',title:'La Doctor',titleRo:'Vizita la medic',level:'A1',color:'#DC2626',
+  vocab:[
+    {de:'Guten Tag, ich bin krank.',     ro:'Bună, sunt bolnav.',            emoji:'🤒', eg:'Guten Tag, ich bin krank.',egRo:'Bună, sunt bolnav.'},
+    {de:'Ich habe Kopfschmerzen.',       ro:'Am durere de cap.',              emoji:'😣', eg:'Ich habe Kopfschmerzen.',egRo:'Am durere de cap.'},
+    {de:'Ich habe Fieber.',              ro:'Am febră.',                      emoji:'🌡️', eg:'Ich habe Fieber.',egRo:'Am febră.'},
+    {de:'Ich habe Husten.',              ro:'Tușesc.',                        emoji:'🤧', eg:'Ich habe Husten.',egRo:'Tușesc.'},
+    {de:'Ich habe Halsschmerzen.',       ro:'Am durere de gât.',              emoji:'🫀', eg:'Ich habe Halsschmerzen.',egRo:'Am durere de gât.'},
+    {de:'Ich bin allergisch gegen...',   ro:'Sunt alergic la...',             emoji:'⚠️', eg:'Ich bin allergisch gegen Penicillin.',egRo:'Sunt alergic la Penicilină.'},
+    {de:'Wie oft soll ich die Medikamente nehmen?', ro:'De câte ori trebuie să iau medicamentele?', emoji:'💊'},
+    {de:'Ich nehme die Medikamente dreimal täglich', ro:'Iau medicamentele de trei ori pe zi', emoji:'⏰'},
+    {de:'Wo ist die nächste Apotheke?',  ro:'Unde este farmacie cea mai apropiată?', emoji:'🏪', eg:'Wo ist die nächste Apotheke?',egRo:'Unde este farmacie cea mai apropiată?'},
+    {de:'Das ist zu teuer.',             ro:'E prea scump.',                  emoji:'💰'},
+    {de:'Gibt es ein billigeres Medikament?', ro:'Există un medicament mai ieftin?', emoji:'💊'},
+  ]
+},
+{
+  id:304,emoji:'🚨',title:'Notfall & Krankheit',titleRo:'Urgență și simptome grave',level:'A2',color:'#EF4444',
+  vocab:[
+    {de:'Ich brauche einen Arzt sofort!', ro:'Am nevoie de doctor imediat!',  emoji:'🚨', eg:'Ich brauche einen Arzt sofort!',egRo:'Am nevoie de doctor imediat!'},
+    {de:'Rufen Sie den Krankenwagen!',   ro:'Chemați ambulanța!',             emoji:'🚑', eg:'Rufen Sie den Krankenwagen!',egRo:'Chemați ambulanța!'},
+    {de:'Ich habe starke Schmerzen.',    ro:'Am dureri foarte puternice.',    emoji:'😩'},
+    {de:'Ich kann nicht atmen.',         ro:'Nu pot respira.',                emoji:'😰'},
+    {de:'Ich bin ohnmächtig geworden.',  ro:'Am leșinat.',                    emoji:'😵'},
+    {de:'Ich habe mich verletzt.',       ro:'M-am rănit.',                    emoji:'🩹', eg:'Ich habe mich verletzt.',egRo:'M-am rănit.'},
+    {de:'Es blutet.',                    ro:'Sângerează.',                    emoji:'🩸'},
+    {de:'Ich brauche einen Zahnarzt.',   ro:'Am nevoie de dentist.',          emoji:'🦷'},
+    {de:'Mein Kind hat Fieber.',         ro:'Copilul meu are febră.',         emoji:'🌡️'},
+    {de:'Die Nummer des Notrufs ist 112', ro:'Numărul serviciului de urgență este 112', emoji:'☎️'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   EXPRESII ZILNICE (305) — Supraviețuire
+   ════════════════════════════════════════════════════ */
+{
+  id:305,emoji:'💬',title:'Expresii Zilnice',titleRo:'Cuvinte și fraze esențiale',level:'A1',color:'#F59E0B',
+  vocab:[
+    {de:'Guten Morgen!',                 ro:'Bună dimineața!',                emoji:'🌅', eg:'Guten Morgen!',egRo:'Bună dimineața!'},
+    {de:'Guten Abend!',                  ro:'Bună seara!',                    emoji:'🌆', eg:'Guten Abend!',egRo:'Bună seara!'},
+    {de:'Wie viel kostet das?',          ro:'Cât costă asta?',                emoji:'💰', eg:'Wie viel kostet das?',egRo:'Cât costă asta?'},
+    {de:'Das ist zu teuer.',             ro:'E prea scump.',                  emoji:'😫'},
+    {de:'Wo ist die Toilette?',          ro:'Unde este toaleta?',             emoji:'🚽', eg:'Wo ist die Toilette?',egRo:'Unde este toaleta?'},
+    {de:'Ich verstehe nicht.',           ro:'Nu înțeleg.',                    emoji:'🤷', eg:'Ich verstehe nicht.',egRo:'Nu înțeleg.'},
+    {de:'Können Sie das bitte wiederholen?', ro:'Puteți să repetați, vă rog?', emoji:'🔄'},
+    {de:'Sprechen Sie bitte langsamer.',  ro:'Vorbiti mai încet, vă rog.',     emoji:'🐢'},
+    {de:'Ich brauche Hilfe.',            ro:'Am nevoie de ajutor.',           emoji:'🆘', eg:'Ich brauche Hilfe.',egRo:'Am nevoie de ajutor.'},
+    {de:'Danke dir / Ihnen.',            ro:'Mulțumesc.',                     emoji:'🙏', eg:'Danke dir!',egRo:'Mulțumesc!'},
+    {de:'Auf Wiedersehen!',              ro:'La revedere!',                   emoji:'👋', eg:'Auf Wiedersehen!',egRo:'La revedere!'},
+    {de:'Gute Nacht!',                   ro:'Noapte bună!',                   emoji:'🌙', eg:'Gute Nacht!',egRo:'Noapte bună!'},
+    {de:'Entschuldigung!',               ro:'Scuzați!',                       emoji:'🙇', eg:'Entschuldigung!',egRo:'Scuzați!'},
+  ]
+},
+
+/* ════════════════════════════════════════════════════
+   MODUL 306 — ARTIKEL & GENUS (Der/Die/Das)
+   ════════════════════════════════════════════════════ */
+{
+  id:306,emoji:'📝',title:'Artikel & Genus',titleRo:'Der, Die, Das',level:'A1',color:'#8B5CF6',
+  vocab:[
+    {de:'der Mann',        ro:'bărbatul',         emoji:'👨', tip:'🔴 DER = masculin. Mann = bărbat. Regula: -er, -el, -ig, -ling → DER'},
+    {de:'die Frau',        ro:'femeia',           emoji:'👩', tip:'🔵 DIE = feminin. Frau = femeie. Regula: -heit, -keit, -ung, -tion → DIE'},
+    {de:'das Kind',        ro:'copilul',          emoji:'👧', tip:'🟡 DAS = neutru. Kind = copil. Regula: Ge-, -chen, -lein → DAS'},
+    {de:'der Hund',        ro:'câinele',          emoji:'🐕', tip:'🔴 Hund (monosilabic) = DER. Regula: animale mascule → DER'},
+    {de:'die Katze',       ro:'pisica',           emoji:'🐱', tip:'🔵 Katze (terminație -e) = DIE. Regula: -e → DIE (feminin)'},
+    {de:'das Auto',        ro:'mașina',           emoji:'🚗', tip:'🟡 Auto (prefix Gr./Lat.) = DAS. Regula: cuvinte străine → DAS'},
+    {de:'der Tisch',       ro:'masa',             emoji:'🪑', tip:'🔴 Tisch (-sch) = DER. Regula: -er, -sch → DER'},
+    {de:'die Tür',         ro:'ușa',              emoji:'🚪', tip:'🔵 Tür (-ür = vocală) = DIE. Regula: -ür → DIE'},
+    {de:'das Fenster',     ro:'fereastra',        emoji:'🪟', tip:'🟡 Fenster (-er, -el) = DAS. Regula: diminutive + -er → DAS'},
+    {de:'der Baum',        ro:'copacul',          emoji:'🌳', tip:'🔴 Baum (-aum) = DER. Regula: -aum → DER (masculin)'},
+    {de:'die Blume',       ro:'floarea',          emoji:'🌹', tip:'🔵 Blume (-e) = DIE. Regula: -e → DIE (feminin)'},
+    {de:'das Blatt',       ro:'frunza',           emoji:'🍃', tip:'🟡 Blatt (-tt) = DAS. Regula: -tt → DAS (neutru)'},
+  ]
+},
+];
+
+// ════════════════════════════════════════════════════
+//  MOTIVATIONSSPRÜCHE
+// ════════════════════════════════════════════════════
+const MOTIVATIONS = [
+  '🚀 Fiecare cuvânt nou te aduce mai aproape de Germania!',
+  '💪 Repetarea este mama învățăturii!',
+  '🌟 O lecție pe zi — progres garantat!',
+  '🧠 Creierul tău creează noi conexiuni acum!',
+  '🎯 Continuă! Consecvența bate talentul!',
+  '🔥 Ești pe drumul cel bun — nu te opri!',
+  '📚 Germana se cucerește un cuvânt pe zi!',
+];
+
+// ════════════════════════════════════════════════════
+//  REALIZĂRI / BADGES
+// ════════════════════════════════════════════════════
+const ACHIEVEMENTS = [
+  {id:'first',  check:()=>doneCnt()>=1,                text:'🎓 Prima lecție completată!',     sub:'+50 XP bonus', xp:50},
+  {id:'three',  check:()=>doneCnt()>=3,                text:'🔥 3 lecții completate!',          sub:'Ești pe drumul cel bun!', xp:0},
+  {id:'halfway',check:()=>doneCnt()>=27,               text:'⭐ Jumătate din toate cursurile!', sub:'Felicitări!', xp:0},
+  {id:'math1',  check:()=>getLP(16).done,              text:'🧮 Rechnen 1 completat!',          sub:'Matematică în germană!', xp:0},
+  {id:'math2',  check:()=>getLP(17).done,              text:'📐 Rechnen 2 completat!',          sub:'Experți în calcul!', xp:0},
+  {id:'all_a1', check:()=>[1,2,3,4,5,6,7,8,9,10,11].every(id=>getLP(id).done), text:'🏅 Nivel A1 completat!', sub:'Excelent!', xp:0},
+  {id:'all_de', check:()=>courseLessons('de').every(l=>getLP(l.id).done), text:'🏆 Abitur — Germană completă!', sub:'Bacalaureat! +100 XP', xp:100},
+  {id:'fs_start',check:()=>getLP(18).done,             text:'🚗 Fahrschule begonnen!',          sub:'Drum bun!', xp:0},
+  {id:'fs_all', check:()=>[18,19,20,21,22].every(id=>getLP(id).done), text:'🪪 Führerschein bestanden!', sub:'Herzlichen Glückwunsch! +100 XP', xp:100},
+  {id:'bf_start',check:()=>courseLessons('beruf').some(l=>getLP(l.id).done), text:'💼 Prima meserie învățată!', sub:'Spor la muncă!', xp:0},
+  {id:'bf_all', check:()=>courseLessons('beruf').every(l=>getLP(l.id).done), text:'💼 Expert în germana de muncă!', sub:'Toate domeniile! +100 XP', xp:100},
+  {id:'id_start',check:()=>getLP(301).done, text:'🗣️ Prezentare personală!', sub:'Acum poți spune cine ești!', xp:0},
+  {id:'health_start',check:()=>getLP(303).done, text:'🏥 Poți vorbi cu doctorul!', sub:'În caz de urgență ești pregătit!', xp:0},
+  {id:'surv_done',check:()=>getLP(305).done, text:'💬 Supraviețuiești în Germania! 🎉', sub:'Frazele zilnice stăpânite! +50 XP', xp:50},
+  {id:'en_start',check:()=>getLP(101).done,            text:'🇬🇧 English begonnen!',            sub:'Well done!', xp:0},
+  {id:'en_all', check:()=>courseLessons('en').every(l=>getLP(l.id).done), text:'🇬🇧 Engleză A1 completă!', sub:'Great job! +100 XP', xp:100},
+  {id:'all',    check:()=>doneCnt()>=LESSONS.length,   text:'👑 Tot cursul complet!',           sub:'Du bist fantastisch!', xp:0},
+];
+
+// ════════════════════════════════════════════════════
+//  STATE & STOCARE
+// ════════════════════════════════════════════════════
+let ST = {
+  screen:'home', tab:'de', lid:null, vi:0,
+  quiz:null, qi:0, qAnswers:[], vocabAnim:'fwd',
+  prog:{}, conf:{}, shownAch:[]
+};
+let currentWord = null;
+let currentLang = 'de-DE';
+
+function loadProg() {
+  try { return JSON.parse(localStorage.getItem('dl4ro_v3') || '{}'); } catch { return {}; }
+}
+function loadConf()    { try { return JSON.parse(localStorage.getItem('dl4ro_conf') || '{}'); } catch { return {}; } }
+function loadAch()     { try { return JSON.parse(localStorage.getItem('dl4ro_ach') || '[]'); } catch { return []; } }
+function saveProg()    { localStorage.setItem('dl4ro_v3', JSON.stringify(ST.prog)); }
+function saveConf()    { localStorage.setItem('dl4ro_conf', JSON.stringify(ST.conf)); }
+function saveAch()     { localStorage.setItem('dl4ro_ach', JSON.stringify(ST.shownAch)); }
+
+function getLP(id)     { return ST.prog[id] || {stars:0,best:0,done:false}; }
+function setLP(id, stars, xp) {
+  const c = getLP(id);
+  ST.prog[id] = {stars:Math.max(c.stars,stars), best:Math.max(c.best,xp), done:stars>0||c.done};
+  saveProg();
+  checkAchievements();
+}
+function bonusXP()  { return parseInt(localStorage.getItem('dl4ro_bonus')||'0'); }
+function addBonus(n){ localStorage.setItem('dl4ro_bonus', bonusXP()+n); }
+function totalXP()  { return Object.values(ST.prog).reduce((s,p)=>s+(p.best||0),0) + bonusXP(); }
+function doneCnt()  { return Object.values(ST.prog).filter(p=>p.done).length; }
+function starsFor(score,total) { const p=score/total; return p>=0.875?3:p>=0.625?2:p>=0.5?1:0; }
+
+// Confidence per word
+function setConf(lessonId, wordIdx, val) {
+  const k = `${lessonId}_${wordIdx}`;
+  ST.conf[k] = val;
+  saveConf();
+  renderLesson(); // refresh to show active state
+}
+function getConf(lessonId, wordIdx) { return ST.conf[`${lessonId}_${wordIdx}`] || null; }
+
+// Streak
+function updateStreak() {
+  const today = new Date().toDateString();
+  const last = localStorage.getItem('dl4ro_streak_date');
+  const n = parseInt(localStorage.getItem('dl4ro_streak') || '0');
+  if (last === today) return;
+  const yest = new Date(); yest.setDate(yest.getDate()-1);
+  const newStreak = last === yest.toDateString() ? n+1 : 1;
+  localStorage.setItem('dl4ro_streak', newStreak);
+  localStorage.setItem('dl4ro_streak_date', today);
+}
+function getStreak() { return parseInt(localStorage.getItem('dl4ro_streak') || '0'); }
+
+// Achievements
+function checkAchievements() {
+  ACHIEVEMENTS.forEach(a => {
+    if (!ST.shownAch.includes(a.id) && a.check()) {
+      ST.shownAch.push(a.id);
+      saveAch();
+      if (a.xp) addBonus(a.xp);
+      setTimeout(() => showAch(a.text, a.sub), 400);
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════
+//  AUDIO
+// ════════════════════════════════════════════════════
+function speak(text, lang) {
+  if (!('speechSynthesis' in window)) { toast('🔇 Audio nu este disponibil'); return; }
+  lang = lang || currentLang || 'de-DE';
+  window.speechSynthesis.cancel();
+  // Umlaut-Cleanup für bessere Aussprache
+  let cleanText = text
+    .replace(/Tschüss/gi, 'Tschüss')  // Standard (manche Browser sprechen „ü" besser)
+    .trim();
+  const u = new SpeechSynthesisUtterance(cleanText);
+  u.lang = lang; u.rate = getRate(); u.pitch = 1.0;
+  // Vom Anwender gewählte Stimme (Audio-Einstellungen) — sonst erste passende
+  const voices = window.speechSynthesis.getVoices();
+  const saved = localStorage.getItem('dl4ro_voice_'+lang.slice(0,2));
+  let v = saved ? voices.find(x=>x.voiceURI===saved) : null;
+  if (!v) v = voices.find(x=>x.lang.startsWith(lang.slice(0,2)));
+  if (v) u.voice = v;
+  window.speechSynthesis.speak(u);
+}
+
+// ════════════════════════════════════════════════════
+//  AUDIO-EINSTELLUNGEN (Stimme & Tempo pro Gerät)
+// ════════════════════════════════════════════════════
+function getRate(){return parseFloat(localStorage.getItem('dl4ro_rate')||'0.82');}
+function setRate(r){
+  localStorage.setItem('dl4ro_rate',r);
+  if(ST.screen==='home'&&ST.tab==='stats')renderStats();
+}
+function setVoice(langKey,uri){
+  if(uri)localStorage.setItem('dl4ro_voice_'+langKey,uri);
+  else localStorage.removeItem('dl4ro_voice_'+langKey);
+}
+function voiceOptions(langKey){
+  const saved=localStorage.getItem('dl4ro_voice_'+langKey);
+  const list=(window.speechSynthesis?speechSynthesis.getVoices():[])
+    .filter(v=>v.lang.toLowerCase().startsWith(langKey));
+  if(!list.length)return'<option value="">Automat (apasă 🔊 o dată)</option>';
+  return'<option value="">Automat</option>'+list.map(v=>
+    `<option value="${v.voiceURI.replace(/"/g,'&quot;')}" ${v.voiceURI===saved?'selected':''}>${v.name}</option>`
+  ).join('');
+}
+
+// ════════════════════════════════════════════════════
+//  QUIZ GENERATORS
+// ════════════════════════════════════════════════════
+function makeVocabQuiz(lesson) {
+  const vocab = lesson.vocab;
+  const lang = courseOf(lesson.id)==='en' ? 'engleză' : 'germană';
+  const shuffled = [...vocab].sort(()=>Math.random()-.5);
+  return shuffled.slice(0, Math.min(8, vocab.length)).map(word => {
+    const wrong = vocab.filter(v=>v.de!==word.de).sort(()=>Math.random()-.5).slice(0,3);
+    const all = [word,...wrong].sort(()=>Math.random()-.5);
+    const ci = all.findIndex(o=>o.de===word.de);
+    const type = Math.random()>.5 ? 'dero' : 'rode';
+    if (type==='dero') {
+      return {q:word.de, hint:'Cum se traduce în română?', emoji:word.emoji,
+              opts:all.map(o=>o.ro), ci, deWord:word.de, isMath:false,
+              fbOk:`✓ Corect!  „${word.de}" = „${word.ro}"`,
+              fbErr:`✗ Greșit!  „${word.de}" = „${word.ro}"`};
+    } else {
+      return {q:word.ro, hint:`Cum se spune în ${lang}?`, emoji:word.emoji,
+              opts:all.map(o=>o.de), ci, deWord:word.de, isMath:false,
+              fbOk:`✓ Corect!  „${word.ro}" = „${word.de}"`,
+              fbErr:`✗ Greșit!  „${word.ro}" = „${word.de}"`};
+    }
+  });
+}
+
+function makeMathQuiz(lesson) {
+  const isFs = lesson.type === 'fahrschule';
+  return lesson.mathProblems.map(p => ({
+    q: p.q, hint: p.hint, emoji: isFs ? '🚗' : '🧮',
+    opts: p.opts, ci: p.opts.indexOf(p.a), deWord: '',
+    isMath: !isFs, isFs,
+    fbOk: isFs ? `✓ Richtig! ${p.a}` : `✓ Richtig! ${p.q.replace(/\n/,' ')} = ${p.a}`,
+    fbErr: isFs ? `✗ Falsch! Die richtige Antwort: ${p.a}` : `✗ Falsch! Das Ergebnis ist: ${p.a}`,
+  }));
+}
+
+// ════════════════════════════════════════════════════
+//  UI HELPERS
+// ════════════════════════════════════════════════════
+let toastT = null;
+function toast(msg, dur=2200) {
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('on');
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),dur);
+}
+
+let achT = null;
+function showAch(text, sub='') {
+  const el=document.getElementById('ach-popup');
+  document.getElementById('ach-text').textContent=text;
+  document.getElementById('ach-sub').textContent=sub;
+  el.classList.add('on');
+  clearTimeout(achT); achT=setTimeout(()=>el.classList.remove('on'),3500);
+}
+
+// ════════════════════════════════════════════════════
+//  RESUME — exakt an der letzten Karte weitermachen
+// ════════════════════════════════════════════════════
+function savePos(){try{localStorage.setItem('dl4ro_pos',JSON.stringify({lid:ST.lid,vi:ST.vi}));}catch{}}
+function loadPos(){try{return JSON.parse(localStorage.getItem('dl4ro_pos'));}catch{return null;}}
+function clearPos(){localStorage.removeItem('dl4ro_pos');}
+function resumeLesson(){
+  const p=loadPos(); if(!p){go('home');return;}
+  const L=LESSONS.find(l=>l.id===p.lid);
+  if(!L){clearPos();go('home');return;}
+  ST.lid=p.lid; ST.vi=Math.min(p.vi||0,L.vocab.length-1); ST.vocabAnim='fwd';
+  go('lesson');
+}
+
+// ════════════════════════════════════════════════════
+//  THEME — Hell / Dunkel
+// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+//  PROFIL & ONBOARDING
+// ════════════════════════════════════════════════════
+function loadProfile(){try{return JSON.parse(localStorage.getItem('dl4ro_profile'))||null;}catch{return null;}}
+function saveProfile(p){localStorage.setItem('dl4ro_profile',JSON.stringify(p));}
+function isAdmin(){return localStorage.getItem('dl4ro_admin')==='true';}
+function setAdmin(v){localStorage.setItem('dl4ro_admin',v?'true':'false');}
+
+function getTheme(){
+  return localStorage.getItem('dl4ro_theme')||((window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');
+}
+function applyTheme(t){
+  document.body.dataset.theme=t;
+  const m=document.querySelector('meta[name="theme-color"]');
+  if(m)m.setAttribute('content',t==='dark'?'#0E1117':'#F4F6FA');
+}
+function toggleTheme(){
+  const t=getTheme()==='dark'?'light':'dark';
+  localStorage.setItem('dl4ro_theme',t);
+  applyTheme(t);
+}
+
+// ════════════════════════════════════════════════════
+//  ONBOARDING UI
+// ════════════════════════════════════════════════════
+function showOnboarding(){
+  const html=`
+  <div class="overlay on" id="onb-overlay">
+    <div class="modal">
+      <h2>Bun venit! 👋</h2>
+      <p>Vrem să te cunoașterea mai bine. Completează informațiile tale:</p>
+      <form id="onb-form">
+        <div class="form-group">
+          <label>Nume *</label>
+          <input type="text" id="onb-name" placeholder="Ex: Maria" required>
+        </div>
+        <div class="form-group">
+          <label>Loc de naștere *</label>
+          <input type="text" id="onb-place" placeholder="Ex: București" required>
+        </div>
+        <div class="form-group">
+          <label>Data nașterii</label>
+          <input type="date" id="onb-date">
+        </div>
+        <div class="form-btns">
+          <button type="submit" class="form-btn pri">Continuă →</button>
+        </div>
+      </form>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
+  document.getElementById('onb-form').addEventListener('submit',(e)=>{
+    e.preventDefault();
+    const name=document.getElementById('onb-name').value.trim();
+    const place=document.getElementById('onb-place').value.trim();
+    const date=document.getElementById('onb-date').value||null;
+    if(!name||!place){toast('⚠️ Completează Nome și Loc!');return;}
+    saveProfile({name,place,date,createdAt:new Date().toISOString()});
+    document.getElementById('onb-overlay').remove();
+    renderHome(); // Refresh cu salut personalizat
+  });
+}
+
+function showAdminLogin(){
+  const html=`
+  <div class="overlay on" id="admin-overlay">
+    <div class="modal">
+      <h2>Admin Mode 🔐</h2>
+      <p>Introdu codul pentru a debloca modul creator:</p>
+      <form id="admin-form">
+        <div class="form-group">
+          <label>Cod</label>
+          <input type="password" id="admin-code" placeholder="Introdu codul..." required>
+        </div>
+        <div class="form-btns">
+          <button type="submit" class="form-btn pri">Intră →</button>
+          <button type="button" class="form-btn sec" onclick="document.getElementById('admin-overlay').remove()">Anulează</button>
+        </div>
+      </form>
+    </div>
+  </div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
+  document.getElementById('admin-form').addEventListener('submit',(e)=>{
+    e.preventDefault();
+    const code=document.getElementById('admin-code').value;
+    if(code==='NORBERT2026'){
+      setAdmin(true);
+      document.getElementById('admin-overlay').remove();
+      showAdminPanel();
+      toast('✅ Admin mode activat!');
+    } else {
+      toast('❌ Cod incorect!');
+    }
+  });
+}
+
+function showAdminPanel(){
+  if(!isAdmin())return;
+  const panel=`
+  <div class="admin-panel on" id="admin-panel">
+    <div class="admin-title">👨‍💻 Admin</div>
+    <button class="admin-btn" onclick="unlockAllLessons()">🔓 Deblochează tot</button>
+    <button class="admin-btn" onclick="ST.prog={};saveProg();renderHome();toast('✅ Reset progres!')">🔄 Reset progres</button>
+    <button class="admin-btn" onclick="showAdminStats()">📊 Statistici</button>
+    <button class="admin-btn" onclick="setAdmin(false);document.getElementById('admin-panel').remove();toast('👋 Admin deactivat')">❌ Deconectare</button>
+  </div>`;
+  const existing=document.getElementById('admin-panel');
+  if(existing)existing.remove();
+  document.body.insertAdjacentHTML('beforeend',panel);
+}
+
+function unlockAllLessons(){
+  LESSONS.forEach(l=>{ST.prog[l.id]={stars:3,best:3,done:true};});
+  saveProg();
+  renderHome();
+  toast('🎉 Toate lecțiile deblocate!');
+}
+
+function showAdminStats(){
+  const total=LESSONS.length;
+  const unlocked=Object.keys(ST.prog).filter(id=>ST.prog[id].done).length;
+  const avgStars=unlocked>0?(Object.values(ST.prog).reduce((s,p)=>s+(p.stars||0),0)/unlocked).toFixed(1):0;
+  toast(`📊 ${unlocked}/${total} lecții | ⭐ ${avgStars}`);
+}
+
+// ════════════════════════════════════════════════════
+//  COACH REACTIONS (Success Animations)
+// ════════════════════════════════════════════════════
+const COACH_MESSAGES={
+  1:['Bun! Continuă! 💪','Ai trecut! 👍','Merge, merge! 🙂'],
+  2:['Foarte bine! 😊','Excelent! 🌟','Super! ⭐'],
+  3:['PERFECT! 🎉','Încredibil! 🏆','Maestru! 👑']
+};
+const COACH_EMOJIS={1:'👍',2:'👏',3:'🎓'};
+const COACH_ANIMS={1:'thumbs-up',2:'clap',3:'dance'};
+
+function showCoachReaction(stars){
+  const msgs=COACH_MESSAGES[stars]||COACH_MESSAGES[1];
+  const msg=msgs[Math.floor(Math.random()*msgs.length)];
+  const emoji=COACH_EMOJIS[stars];
+  const anim=COACH_ANIMS[stars];
+
+  const html=`<div class="coach-box">
+    <div class="coach-emoji ${anim}">${emoji}</div>
+    <div class="coach-text">${msg}<small>🧑‍🏫 Coach Deutsch</small></div>
+  </div>`;
+
+  document.body.insertAdjacentHTML('beforeend',html);
+  setTimeout(()=>{document.querySelector('.coach-box')?.remove();},4000);
+}
+  if(ST.screen==='home')renderHome();
+}
+
+// ════════════════════════════════════════════════════
+//  NAVIGARE
+// ════════════════════════════════════════════════════
+function go(screen) {
+  ST.screen=screen;
+  document.body.classList.toggle('tabs-on', screen==='home');
+  if (screen==='home')    renderHome();
+  else if (screen==='lesson')   renderLesson();
+  else if (screen==='quiz')     renderQuiz();
+  else if (screen==='results')  renderResults();
+  window.scrollTo(0,0);
+}
+
+// ════════════════════════════════════════════════════
+//  HOME
+// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+//  ZEIT-TRACKING
+// ════════════════════════════════════════════════════
+let _sesStart=null, _sesTimer=null;
+
+function startSes(){
+  _sesStart=Date.now();
+  clearInterval(_sesTimer);
+  _sesTimer=setInterval(flushSes,30000);
+}
+function flushSes(){
+  if(!_sesStart)return;
+  const dur=Math.min(Math.floor((Date.now()-_sesStart)/1000),7200);
+  if(dur<3)return;
+  const all=loadSes();
+  all.push({ts:_sesStart,dur});
+  _sesStart=Date.now();
+  localStorage.setItem('dl4ro_time',JSON.stringify(all.slice(-600)));
+}
+function endSes(){clearInterval(_sesTimer);flushSes();_sesStart=null;}
+function loadSes(){try{return JSON.parse(localStorage.getItem('dl4ro_time')||'[]');}catch{return[];}}
+function getZeit(){
+  const all=loadSes(), d=new Date();
+  const ms=(y,m,dy)=>new Date(y,m,dy).getTime();
+  const todayMs=ms(d.getFullYear(),d.getMonth(),d.getDate());
+  const weekMs=ms(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7));
+  const monthMs=ms(d.getFullYear(),d.getMonth(),1);
+  const yearMs=ms(d.getFullYear(),0,1);
+  const sum=from=>all.filter(s=>s.ts>=from).reduce((a,s)=>a+s.dur,0);
+  return{today:sum(todayMs),week:sum(weekMs),month:sum(monthMs),year:sum(yearMs),total:all.reduce((a,s)=>a+s.dur,0)};
+}
+function fmtTime(s){
+  if(!s)return'—';
+  if(s<60)return s+'s';
+  const m=Math.floor(s/60),h=Math.floor(m/60);
+  return h>0?`${h}h${m%60?' '+(m%60)+'m':''}`:m+'m';
+}
+
+// ════════════════════════════════════════════════════
+//  AMPEL / READINESS
+// ════════════════════════════════════════════════════
+function getLessonReady(id){
+  const L=LESSONS.find(l=>l.id===id);
+  if(!L)return'off';
+  const p=getLP(id);
+  if(!p.done)return'off';
+  const starScore=(p.stars||0)/3;
+  let grn=0,rated=0;
+  L.vocab.forEach((_,i)=>{const c=getConf(id,i);if(c){rated++;if(c==='grn')grn++;}});
+  const score=rated>0?starScore*.6+(grn/L.vocab.length)*.4:starScore;
+  return score>=0.75?'grn':score>=0.4?'yel':'red';
+}
+function getGroupReady(ids){
+  const done=ids.filter(id=>getLP(id).done);
+  if(!done.length)return'off';
+  const map={grn:1,yel:.5,red:0,off:0};
+  const avg=done.reduce((a,id)=>a+(map[getLessonReady(id)]||0),0)/ids.length;
+  return avg>=0.7?'grn':avg>=0.3?'yel':'red';
+}
+function ampelRow(r,name,msg){
+  const lc={grn:'l-grn',yel:'l-yel',red:'l-red',off:'l-off'}[r]||'l-off';
+  return`<div class="ampel-row"><div class="ampel-light ${lc}"></div><div class="ampel-name">${name}</div><div class="ampel-msg">${msg}</div></div>`;
+}
+
+// ════════════════════════════════════════════════════
+//  KURSE / TABS
+// ════════════════════════════════════════════════════
+const COURSES={
+  de:{name:'Germană',de:'Deutsch',eyebrow:'Curs Gratuit · A1–A2 + Matematică',sub:'Vocabular, exemple și calcul pentru începători',speech:'de-DE',hdr:''},
+  beruf:{name:'Meserie',de:'Beruf',eyebrow:'Germană pentru Muncă · A1–A2',sub:'Vocabular pe domenii profesionale: șantier, recoltă, birou, îngrijire, depozit, restaurant',speech:'de-DE',hdr:'hdr-bf'},
+  fs:{name:'Fahrschule',de:'Fahrschule',eyebrow:'Categoria B · Teorie',sub:'Vocabular auto, semne de circulație, reguli și simulare de examen',speech:'de-DE',hdr:'hdr-fs'},
+  en:{name:'Engleză',de:'Englisch',eyebrow:'Curs Gratuit · A1',sub:'De la zero — saluturi, numere, culori, familie și expresii zilnice',speech:'en-GB',hdr:'hdr-en'},
+  selectarii:{name:'Selectări',de:'Einstellungen',eyebrow:'Setări și Statistici',sub:'Voce, viteză, statistici de progres și realizări',speech:'de-DE',hdr:'hdr-stats'},
+};
+function courseOf(id){return id>=201&&id<300?'beruf':id>=101?'en':id>=18?'fs':'de';}
+function courseLessons(cid){return LESSONS.filter(l=>courseOf(l.id)===cid);}
+function setTab(t){
+  ST.tab=t; localStorage.setItem('dl4ro_tab',t);
+  document.body.dataset.tab=t;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById('tb-'+t); if(btn)btn.classList.add('active');
+  go('home');
+}
+
+// ════════════════════════════════════════════════════
+//  SCHULKLASSE (nur Deutsch-Kurs, Lekt. 1–17)
+// ════════════════════════════════════════════════════
+const KLASSEN=[
+  {min:0, max:0, ico:'🌱',de:'Vorschule',  ro:'Preșcolar — abia am început!'},
+  {min:1, max:1, ico:'📖',de:'Klasse 1',  ro:'Clasa 1 — Grundschule'},
+  {min:2, max:3, ico:'📖',de:'Klasse 2',  ro:'Clasa 2 — Grundschule'},
+  {min:4, max:5, ico:'📖',de:'Klasse 3',  ro:'Clasa 3 — Grundschule'},
+  {min:6, max:7, ico:'📖',de:'Klasse 4',  ro:'Clasa 4 — Grundschule'},
+  {min:8, max:9, ico:'🏫',de:'Klasse 5',  ro:'Clasa 5 — Mittelschule'},
+  {min:10,max:11,ico:'🏫',de:'Klasse 6',  ro:'Clasa 6 — Mittelschule'},
+  {min:12,max:13,ico:'🏫',de:'Klasse 7',  ro:'Clasa 7 — Mittelschule'},
+  {min:14,max:15,ico:'🎓',de:'Klasse 8',  ro:'Clasa 8 — Gymnasium'},
+  {min:16,max:16,ico:'🎓',de:'Klasse 9',  ro:'Clasa 9 — Gymnasium'},
+  {min:17,max:17,ico:'🏆',de:'Abitur!',   ro:'Bacalaureat — Germană finalizată!'},
+];
+function deDoneCnt(){return courseLessons('de').filter(l=>getLP(l.id).done).length;}
+function getKlasse(){const d=deDoneCnt();return KLASSEN.find(k=>d>=k.min&&d<=k.max)||KLASSEN[KLASSEN.length-1];}
+function neededForNext(){const d=deDoneCnt(),nk=KLASSEN.find(k=>k.min>d);return nk?nk.min-d:0;}
+
+// ════════════════════════════════════════════════════
+//  AMPEL TEXT HELPERS
+// ════════════════════════════════════════════════════
+function readyMsg(r,groupDone,groupTotal){
+  if(r==='off') return groupDone===0?'Neînceput':'Abia am început…';
+  if(r==='grn') return'✓ Excelent! Pregătit!';
+  if(r==='yel') return`În progres (${groupDone}/${groupTotal})`;
+  return`Repetă — ${groupDone}/${groupTotal} lecții`;
+}
+
+function lessonCards(list){
+  return list.map((L,i)=>{
+    const p=getLP(L.id), prev=i>0?getLP(list[i-1].id):null;
+    const isMath=L.type==='math', isFs=courseOf(L.id)==='fs', isEn=courseOf(L.id)==='en', isBf=courseOf(L.id)==='beruf';
+    // Beruf: alle Module frei wählbar (keine Kette) — „aktuell" ist nur das erste offene
+    const unlocked=isBf||i===0||(prev&&prev.done);
+    const isCur=!p.done&&unlocked&&(!isBf||list.findIndex(l=>!getLP(l.id).done)===i);
+    const cls=[p.done?'done':'',isCur?'cur':'',!unlocked?'locked':'',isMath?'math-card':isFs?'fs-card':''].filter(Boolean).join(' ');
+    const starsStr=(p.stars>0?'⭐'.repeat(p.stars):'')+('☆'.repeat(3-(p.stars||0)));
+    const icon=p.done?'✅':unlocked?'▶️':'🔒';
+    const lvlCls=isBf?'bf':isEn?'en':isMath?'math':L.level==='A1'?'a1':L.level==='A2'?'a2':'b1';
+    const lvlTxt=isMath?'🧮 Mathe':isFs?'🚗 B':isEn?'🇬🇧 '+L.level:isBf?'💼 '+L.level:L.level;
+    const rdy=p.done?getLessonReady(L.id):null;
+    const rdyPill=rdy?`<span class="r-pill r-${rdy}">${rdy==='grn'?'✓ Bereit':rdy==='yel'?'⟳ Üben':'↩ Wiederholen'}</span>`:'';
+    return`<div class="lcard ${cls}" onclick="onLessonClick(${L.id},${unlocked})">
+      <div class="l-ico" style="background:${L.color}1c">${L.emoji}</div>
+      <div class="l-info">
+        <div class="l-title">${i+1}. ${L.title}</div>
+        <div class="l-sub">${L.titleRo}</div>
+        <div class="l-meta">
+          <span class="badge ${lvlCls}">${lvlTxt}</span>
+          <span class="badge">${L.vocab.length} cuv.</span>
+          <span class="stars">${starsStr}</span>
+          ${rdyPill}
+        </div>
+      </div>
+      <div class="l-status">${icon}</div>
+    </div>`;
+  }).join('');
+}
+
+function ringSvg(pct){
+  const C=2*Math.PI*26, off=C*(1-pct/100);
+  return`<div class="ring-wrap">
+    <svg width="64" height="64" viewBox="0 0 64 64">
+      <circle class="ring-bg" cx="32" cy="32" r="26"/>
+      <circle class="ring-fg" cx="32" cy="32" r="26" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/>
+    </svg>
+    <div class="ring-txt">${pct}%</div>
+  </div>`;
+}
+
+function courseHdr(cid){
+  const c=COURSES[cid], list=courseLessons(cid);
+  const done=list.filter(l=>getLP(l.id).done).length;
+  const pct=Math.round(done/list.length*100);
+  const streak=getStreak(), xp=totalXP();
+  const profile=loadProfile();
+  const greeting=profile?`${profile.name}, `:'';
+  const sub=profile?`${c.sub} | De vreme ce ești din ${profile.place}!`:c.sub;
+  return`<div class="hdr ${c.hdr}">
+    <div class="hdr-top">
+      <div>
+        <div class="hdr-eyebrow">${c.eyebrow}</div>
+        <h1>${greeting}${c.name}</h1>
+        <p>${sub}</p>
+      </div>
+      ${ringSvg(pct)}
+    </div>
+    <div class="stats-row">
+      <div class="pill">⭐ ${xp} XP</div>
+      <div class="pill">📚 ${done}/${list.length}</div>
+      ${streak>0?`<div class="pill">🔥 ${streak} ${streak===1?'zi':'zile'}</div>`:''}
+      <button class="pill theme-btn" onclick="toggleTheme()" aria-label="Mod luminos / întunecat">${getTheme()==='dark'?'☀️':'🌙'}</button>
+      ${!isAdmin()?`<button class="pill" onclick="showAdminLogin()" style="font-size:10px;padding:4px 8px;opacity:.5;">⚙️</button>`:''}
+    </div>
+  </div>`;
+}
+
+function renderHome() {
+  if(ST.tab==='selectarii'){renderStats();return;}
+  const cid=ST.tab, list=courseLessons(cid);
+  const nextL=list.find(l=>!getLP(l.id).done);
+  const mot=MOTIVATIONS[Math.floor(Math.random()*MOTIVATIONS.length)];
+  let mid='';
+
+  if(cid==='de'){
+    const klasse=getKlasse(), needed=neededForNext();
+    const a1ids=[1,2,3,4,5,6,7,8,9,10,11], a2ids=[12,13,14,15], mathids=[16,17];
+    const rA1=getGroupReady(a1ids), rA2=getGroupReady(a2ids), rMath=getGroupReady(mathids);
+    const dA1=a1ids.filter(id=>getLP(id).done).length;
+    const dA2=a2ids.filter(id=>getLP(id).done).length;
+    const dMath=mathids.filter(id=>getLP(id).done).length;
+    mid=`
+    <div class="klasse-card" style="margin-top:16px">
+      <div class="klasse-ico">${klasse.ico}</div>
+      <div class="klasse-info">
+        <div class="klasse-name">${klasse.de}</div>
+        <div class="klasse-ro">${klasse.ro}</div>
+        ${needed>0?`<div class="klasse-next">📌 Încă ${needed} ${needed===1?'lecție':'lecții'} până la ${KLASSEN[KLASSEN.indexOf(klasse)+1]?.de||'Abitur'}!</div>`:''}
+      </div>
+      <div class="klasse-badge">${deDoneCnt()}/17<small>lecții</small></div>
+    </div>
+    <div class="ampel-card">
+      <div class="sect-hdr">🚦 Ești pregătit pentru pasul următor?</div>
+      ${ampelRow(rA1,'Nivel A1 (Lect. 1–11)',readyMsg(rA1,dA1,11))}
+      ${ampelRow(rA2,'Nivel A2 (Lect. 12–15)',readyMsg(rA2,dA2,4))}
+      ${ampelRow(rMath,'Matematică (Lect. 16–17)',readyMsg(rMath,dMath,2))}
+      ${nextL?`<div class="ampel-next">📌 Pasul următor: ${nextL.emoji} ${nextL.title}</div>`:'<div class="ampel-next">🏆 Felicitări! Curs finalizat!</div>'}
+    </div>`;
+  } else if(cid==='fs'){
+    const fsids=list.map(l=>l.id);
+    const dFs=fsids.filter(id=>getLP(id).done).length;
+    const rFs=getGroupReady(fsids);
+    const steps=list.map(l=>`<div class="fs-step ${getLP(l.id).done?'done':''}"></div>`).join('');
+    mid=`
+    <div class="course-card" style="margin-top:16px">
+      <div class="cc-ico">🪪</div>
+      <div style="flex:1">
+        <div class="cc-name">Drumul spre permis ${dFs===5?'— Bestanden! 🎉':''}</div>
+        <div class="cc-sub">${dFs}/5 module terminate · Categoria B</div>
+        <div class="fs-steps">${steps}</div>
+      </div>
+    </div>
+    <div class="ampel-card">
+      <div class="sect-hdr">🚦 Pregătit pentru examen?</div>
+      ${ampelRow(rFs,'Teorie + vocabular',readyMsg(rFs,dFs,5))}
+      ${nextL?`<div class="ampel-next">📌 Următorul modul: ${nextL.emoji} ${nextL.title}</div>`:'<div class="ampel-next">🪪 Toate modulele terminate — Viel Erfolg la examen!</div>'}
+      <div class="fs-exam-box">ℹ️ <b>Știai?</b> Examenul teoretic german are 30 de întrebări; la mai mult de 10 puncte de eroare ești respins. În unele landuri poți susține examenul și în limba română!</div>
+    </div>`;
+  } else if(cid==='beruf'){
+    const dBf=list.filter(l=>getLP(l.id).done).length;
+    mid=`
+    <div class="course-card" style="margin-top:16px">
+      <div class="cc-ico">💼</div>
+      <div style="flex:1">
+        <div class="cc-name">Germană pentru meseria ta</div>
+        <div class="cc-sub">Toate domeniile sunt deschise — alege ce ți se potrivește! Fiecare modul are vocabular real de la locul de muncă.</div>
+      </div>
+      <div class="cc-val">${dBf}/${list.length}</div>
+    </div>`;
+  } else {
+    const dEn=list.filter(l=>getLP(l.id).done).length;
+    const rEn=getGroupReady(list.map(l=>l.id));
+    mid=`
+    <div class="course-card" style="margin-top:16px">
+      <div class="cc-ico">🇬🇧</div>
+      <div style="flex:1">
+        <div class="cc-name">English for you!</div>
+        <div class="cc-sub">Pronunție britanică la fiecare cuvânt — apasă 🔊</div>
+      </div>
+      <div class="cc-val" style="color:var(--en1)">${dEn}/${list.length}</div>
+    </div>
+    <div class="ampel-card">
+      <div class="sect-hdr">🚦 Progresul tău</div>
+      ${ampelRow(rEn,'Engleză A1',readyMsg(rEn,dEn,list.length))}
+      ${nextL?`<div class="ampel-next">📌 Pasul următor: ${nextL.emoji} ${nextL.title}</div>`:'<div class="ampel-next">🏆 Felicitări! Curs finalizat!</div>'}
+    </div>`;
+  }
+
+  // Weiterlern-Karte: mitten in einer Lektion unterbrochen?
+  let resumeHtml='';
+  const pos=loadPos();
+  if(pos&&pos.vi>0&&courseOf(pos.lid)===cid){
+    const RL=LESSONS.find(l=>l.id===pos.lid);
+    if(RL)resumeHtml=`
+    <div class="course-card resume-card" style="margin-top:16px" onclick="resumeLesson()">
+      <div class="cc-ico">⏯️</div>
+      <div style="flex:1">
+        <div class="cc-name">Continuă de unde ai rămas</div>
+        <div class="cc-sub">${RL.emoji} ${RL.title} — cardul ${Math.min(pos.vi+1,RL.vocab.length)}/${RL.vocab.length}</div>
+      </div>
+      <div class="cc-val">→</div>
+    </div>`;
+  }
+
+  document.getElementById('app').innerHTML=`
+  <div class="screen active">
+    ${courseHdr(cid)}
+    ${resumeHtml}
+    ${mid}
+    <p class="motivate">${mot}</p>
+    <div class="lessons-wrap" style="margin-top:8px">
+      <div class="sec-title">📖 ${cid==='fs'?'Modulele mele':'Lecțiile mele'}</div>
+      ${lessonCards(list)}
+    </div>
+  </div>`;
+}
+
+function renderStats(){
+  const zeit=getZeit(), streak=getStreak(), xp=totalXP(), done=doneCnt();
+  const achHtml=ACHIEVEMENTS.map(a=>{
+    const earned=ST.shownAch.includes(a.id);
+    return`<div class="ach-row ${earned?'':'locked'}">
+      <div class="ach-ico">${a.text.split(' ')[0]}</div>
+      <div><div class="ach-name">${a.text.slice(a.text.indexOf(' ')+1)}</div><div class="ach-desc">${a.sub}</div></div>
+      <div class="ach-check">${earned?'✅':'🔒'}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('app').innerHTML=`
+  <div class="screen active">
+    <div class="hdr hdr-stats">
+      <div class="hdr-top">
+        <div>
+          <div class="hdr-eyebrow">Profilul Tău</div>
+          <h1>Selectări</h1>
+          <p>Setări, statistici și realizări</p>
+        </div>
+        ${ringSvg(Math.round(done/LESSONS.length*100))}
+      </div>
+      <div class="stats-row">
+        <div class="pill">⭐ ${xp} XP</div>
+        <div class="pill">📚 ${done}/${LESSONS.length} lecții</div>
+        ${streak>0?`<div class="pill">🔥 ${streak} ${streak===1?'zi':'zile'}</div>`:''}
+        <button class="pill theme-btn" onclick="toggleTheme()" aria-label="Mod luminos / întunecat">${getTheme()==='dark'?'☀️':'🌙'}</button>
+      </div>
+    </div>
+    <div class="stat-hero">
+      <div class="stat-tile"><div class="st-val">${fmtTime(zeit.today)}</div><div class="st-lbl">⏱️ Azi</div></div>
+      <div class="stat-tile"><div class="st-val">${fmtTime(zeit.week)}</div><div class="st-lbl">📅 Săptămâna asta</div></div>
+      <div class="stat-tile"><div class="st-val">${fmtTime(zeit.month)}</div><div class="st-lbl">🗓️ Luna asta</div></div>
+      <div class="stat-tile"><div class="st-val">${fmtTime(zeit.year)}</div><div class="st-lbl">📊 Anul acesta</div></div>
+    </div>
+    <div class="course-card">
+      <div class="cc-ico">🔥</div>
+      <div style="flex:1">
+        <div class="cc-name">Serie de învățare</div>
+        <div class="cc-sub">Învață zilnic ca să crească!</div>
+      </div>
+      <div class="cc-val" style="color:var(--fs1)">${streak} ${streak===1?'zi':'zile'}</div>
+    </div>
+    <div class="zeit-card" style="margin-top:10px">
+      <div class="sect-hdr">🔊 Setări audio — voce și viteză</div>
+      <div class="voice-row">
+        <div class="voice-lbl">Voce germană</div>
+        <select class="voice-sel" onchange="setVoice('de',this.value)">${voiceOptions('de')}</select>
+        <button class="vtest" onclick="speak('Guten Tag! Willkommen!','de-DE')" aria-label="Test">🔊</button>
+      </div>
+      <div class="voice-row">
+        <div class="voice-lbl">Voce engleză</div>
+        <select class="voice-sel" onchange="setVoice('en',this.value)">${voiceOptions('en')}</select>
+        <button class="vtest" onclick="speak('Hello! Welcome!','en-GB')" aria-label="Test">🔊</button>
+      </div>
+      <div class="voice-row">
+        <div class="voice-lbl">Viteză</div>
+        <div class="rate-btns">
+          <button class="rate-btn ${Math.abs(getRate()-0.6)<0.05?'on':''}" onclick="setRate('0.6')">🐢 Încet</button>
+          <button class="rate-btn ${Math.abs(getRate()-0.82)<0.05?'on':''}" onclick="setRate('0.82')">Normal</button>
+          <button class="rate-btn ${Math.abs(getRate()-1.05)<0.05?'on':''}" onclick="setRate('1.05')">🐇 Rapid</button>
+        </div>
+      </div>
+      <div class="cc-sub" style="margin-top:8px">ℹ️ Vocile disponibile depind de telefonul tău. Pe iPhone: Setări → Accesibilitate → Conținut vorbit → Voci poți descărca voci germane mai bune (gratuit).</div>
+    </div>
+    <div class="lessons-wrap" style="margin-top:10px">
+      <div class="sec-title">🏅 Realizări (${ST.shownAch.length}/${ACHIEVEMENTS.length})</div>
+      <div class="ach-grid">${achHtml}</div>
+    </div>
+  </div>`;
+}
+
+function onLessonClick(id, unlocked) {
+  if (!unlocked) { toast('🔒 Termină lecția anterioară mai întâi!'); return; }
+  ST.lid=id; ST.vi=0; ST.vocabAnim='fwd';
+  go('lesson');
+}
+
+// ════════════════════════════════════════════════════
+//  LECȚIE — CĂRȚI VOCABULAR
+// ════════════════════════════════════════════════════
+function renderLesson() {
+  const L=LESSONS.find(l=>l.id===ST.lid);
+  if (!L) { go('home'); return; }
+  const w=L.vocab[ST.vi];
+  currentWord=w.de.replace(/\s*\(.*?\)/g,'').trim(); // strip "(+)" etc for speech
+  currentLang=COURSES[courseOf(L.id)].speech;
+  const tot=L.vocab.length, pct=Math.round((ST.vi+1)/tot*100);
+  const isLast=ST.vi===tot-1;
+  const anim=ST.vocabAnim;
+  const conf=getConf(ST.lid,ST.vi);
+  savePos(); // Position merken — Wiedereinstieg genau hier
+
+  const tipHtml = w.tip
+    ? `<div class="tip-box">💡 ${w.tip}</div>` : '';
+  const egHtml = w.eg
+    ? `<div class="eg-box"><span class="eg-de">📝 ${w.eg}</span><span class="eg-ro">${w.egRo||''}</span></div>` : '';
+
+  const confHtml = `
+    <div class="conf-label">Cât de bine cunoști acest cuvânt?</div>
+    <div class="conf-row">
+      <button class="conf-btn ${conf==='red'?'active-red':''}" onclick="setConf(${ST.lid},${ST.vi},'red')">🔴<br>Încă nu</button>
+      <button class="conf-btn ${conf==='yel'?'active-yel':''}" onclick="setConf(${ST.lid},${ST.vi},'yel')">🟡<br>Aproape</button>
+      <button class="conf-btn ${conf==='grn'?'active-grn':''}" onclick="setConf(${ST.lid},${ST.vi},'grn')">🟢<br>Știu!</button>
+    </div>`;
+
+  document.getElementById('app').innerHTML = `
+  <div class="screen active">
+    <div class="v-hdr">
+      <button class="back-btn" onclick="go('home')">‹</button>
+      <div class="v-hdr-info">
+        <div class="v-hdr-title">${L.emoji} ${L.title}</div>
+        <div class="v-hdr-sub">${L.titleRo}</div>
+      </div>
+      <div class="cnt-pill">${ST.vi+1} / ${tot}</div>
+    </div>
+    <div class="vc-wrap">
+      <div class="vc-prog"><div class="vc-prog-fill" style="width:${pct}%"></div></div>
+      <div class="vc-card anim-${anim}">
+        <div class="vc-emoji">${w.emoji}</div>
+        <div class="vc-de">${w.de}</div>
+        <div class="vc-ro">${w.ro}</div>
+        <button class="speak-btn" onclick="speak(currentWord)">🔊 Pronunță</button>
+        ${tipHtml}
+        ${egHtml}
+        ${confHtml}
+      </div>
+      <div class="vc-nav">
+        <button class="nav-btn" onclick="vcNav(-1)" ${ST.vi===0?'disabled':''}>← Înapoi</button>
+        <button class="nav-btn ${isLast?'':'pri'}" onclick="vcNav(1)">${isLast?'Gata! 🎉':'Următor →'}</button>
+      </div>
+      ${isLast?`<button class="quiz-go-btn" onclick="startQuiz(${L.id})">🎯 Începe Quiz-ul!</button>`:''}
+    </div>
+  </div>`;
+}
+
+function vcNav(d) {
+  const L=LESSONS.find(l=>l.id===ST.lid);
+  const ni=ST.vi+d;
+  if (ni<0||ni>=L.vocab.length) return;
+  ST.vocabAnim=d>0?'fwd':'bwd';
+  ST.vi=ni;
+  renderLesson();
+}
+
+function startQuiz(id) {
+  const L=LESSONS.find(l=>l.id===id);
+  ST.lid=id;
+  currentLang=COURSES[courseOf(id)].speech;
+  ST.quiz = L.mathProblems ? makeMathQuiz(L) : makeVocabQuiz(L);
+  ST.qi=0; ST.qAnswers=[];
+  go('quiz');
+}
+
+// ════════════════════════════════════════════════════
+//  QUIZ
+// ════════════════════════════════════════════════════
+function renderQuiz() {
+  const L=LESSONS.find(l=>l.id===ST.lid);
+  const q=ST.quiz[ST.qi];
+  const tot=ST.quiz.length, pct=Math.round(ST.qi/tot*100);
+  const course=courseOf(L.id);
+  const isMath=q.isMath, isFs=q.isFs||course==='fs', isEn=course==='en';
+  const hdrCls=isMath?'q-hdr math-hdr':isFs?'q-hdr fs-hdr':isEn?'q-hdr en-hdr':'q-hdr';
+  const textCls=(isMath||q.isFs)?'q-text math-q':'q-text';
+
+  const opts=q.opts.map((o,i)=>
+    `<button class="q-opt" id="qo${i}" onclick="answer(${i})">${o}</button>`
+  ).join('');
+
+  document.getElementById('app').innerHTML = `
+  <div class="screen active">
+    <div class="${hdrCls}">
+      <button class="back-btn" onclick="go('home')">‹</button>
+      <div class="q-prog-bar"><div class="q-prog-fill" style="width:${pct}%"></div></div>
+      <div class="cnt-pill">${ST.qi+1}/${tot}</div>
+    </div>
+    <div class="q-wrap">
+      <div class="q-card">
+        <div class="q-num">${isMath?'🧮 Calcul':q.isFs?'🚗 Fahrprüfung':isFs?'🚗 Fahrschule':'📖 Vocabular'} · Întrebarea ${ST.qi+1} din ${tot}</div>
+        <div class="q-emoji">${q.emoji}</div>
+        <div class="${textCls}">${q.q}</div>
+        ${isMath&&q.hint?`<div class="math-hint">${q.hint}</div>`:`<div class="q-hint">${q.hint}</div>`}
+      </div>
+      <div class="q-opts">${opts}</div>
+      <div class="q-fb" id="qfb"></div>
+      <button class="q-next ${isMath?'math-next':isFs?'fs-next':isEn?'en-next':''}" id="qnext" onclick="nextQ()">
+        ${ST.qi+1>=tot?'📊 Vezi rezultatele':'Următoarea →'}
+      </button>
+    </div>
+  </div>`;
+}
+
+function answer(ci) {
+  const q=ST.quiz[ST.qi];
+  const ok=ci===q.ci;
+  document.querySelectorAll('.q-opt').forEach(b=>b.classList.add('dis'));
+  document.getElementById('qo'+q.ci).classList.add('ok');
+  if (!ok) document.getElementById('qo'+ci).classList.add('err');
+  const fb=document.getElementById('qfb');
+  fb.textContent=ok?q.fbOk:q.fbErr;
+  fb.className=`q-fb on ${ok?'ok':'err'}`;
+  document.getElementById('qnext').classList.add('on');
+  ST.qAnswers.push(ok);
+  if (ok && q.deWord) setTimeout(()=>speak(q.deWord),550);
+}
+
+function nextQ() {
+  ST.qi++;
+  if (ST.qi>=ST.quiz.length) go('results');
+  else renderQuiz();
+}
+
+// ════════════════════════════════════════════════════
+//  REZULTATE
+// ════════════════════════════════════════════════════
+function renderResults() {
+  const correct=ST.qAnswers.filter(Boolean).length;
+  const tot=ST.qAnswers.length;
+  const stars=starsFor(correct,tot);
+  const xp=correct*10;
+  setLP(ST.lid,stars,xp);
+  clearPos(); // Lektion abgeschlossen — kein Wiedereinstieg mehr nötig
+  setTimeout(()=>showCoachReaction(stars),800); // Coach gratuliert nach kurzer Verzögerung
+  const L=LESSONS.find(l=>l.id===ST.lid);
+  const cList=courseLessons(courseOf(ST.lid));
+  const nextL=cList[cList.findIndex(l=>l.id===ST.lid)+1];
+
+  const [trophy,title,sub]=
+    stars===3&&correct===tot?['🏆','Perfect!','Ai răspuns corect la toate! Felicitări!']:
+    stars===3?['🏆','Aproape perfect!','Rezultat excelent! Felicitări!']:
+    stars===2?['🌟','Sehr gut!','Rezultat excelent! Continuă!']:
+    stars===1?['👍','Gut!','Ai trecut! Repetă pentru mai multe stele!']:
+              ['💪','Noch einmal!','Revizuiește și repetă quiz-ul!'];
+
+  const starsHtml='⭐'.repeat(stars)+'☆'.repeat(3-stars);
+  const pct=Math.round(correct/tot*100);
+
+  document.getElementById('app').innerHTML = `
+  <div class="screen active">
+    <div class="res-wrap">
+      <div class="res-trophy">${trophy}</div>
+      <div class="res-title">${title}</div>
+      <div class="res-sub">${sub}</div>
+      <div class="res-score-card">
+        <div class="res-big">${correct}/${tot}</div>
+        <div class="res-lbl">răspunsuri corecte · ${pct}%</div>
+        <div class="res-stars">${starsHtml}</div>
+      </div>
+      <div class="xp-pill">+${xp} XP câștigat! 🎉</div>
+      <div class="res-btns">
+        ${nextL&&stars>0?`
+        <button class="res-btn" onclick="onLessonClick(${nextL.id},true)">
+          ${nextL.emoji} ${nextL.title} →
+        </button>`:''  }
+        <button class="res-btn" onclick="startQuiz(${ST.lid})">🔄 Repetă quiz-ul</button>
+        <button class="res-btn" onclick="ST.lid=${ST.lid};ST.vi=0;go('lesson')">📖 Revizuiește lecția</button>
+        <button class="res-btn sec" onclick="go('home')">🏠 Acasă</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════════
+//  SWIPE + KEYBOARD
+// ════════════════════════════════════════════════════
+let _tx=0,_ty=0;
+document.addEventListener('touchstart',e=>{_tx=e.touches[0].clientX;_ty=e.touches[0].clientY;},{passive:true});
+document.addEventListener('touchend',e=>{
+  if (ST.screen!=='lesson') return;
+  const dx=_tx-e.changedTouches[0].clientX, dy=Math.abs(_ty-e.changedTouches[0].clientY);
+  if (Math.abs(dx)>55&&dy<40) vcNav(dx>0?1:-1);
+},{passive:true});
+
+document.addEventListener('keydown',e=>{
+  if (ST.screen==='lesson') {
+    if (e.key==='ArrowRight') vcNav(1);
+    else if (e.key==='ArrowLeft') vcNav(-1);
+    else if (e.key===' '||e.key==='Enter') speak(currentWord||'');
+  }
+});
+
+// ════════════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════════════
+function init() {
+  applyTheme(getTheme());
+  ST.prog=loadProg();
+  ST.conf=loadConf();
+  ST.shownAch=loadAch();
+  updateStreak();
+  startSes();
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden)endSes(); else startSes(); });
+  window.addEventListener('beforeunload',endSes);
+  if ('speechSynthesis' in window) {
+    speechSynthesis.getVoices();
+    speechSynthesis.addEventListener('voiceschanged',()=>{
+      speechSynthesis.getVoices();
+      // Stimmen laden asynchron (iOS) — offene Audio-Einstellungen auffrischen
+      if(ST.screen==='home'&&ST.tab==='stats')renderStats();
+    });
+  }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  }
+  const savedTab=localStorage.getItem('dl4ro_tab');
+  const validTab=(savedTab&&COURSES[savedTab])?savedTab:'de';
+  setTab(validTab);
+
+  // Prüfe Onboarding — nur beim ersten Start
+  if(!loadProfile()){
+    showOnboarding();
+  }
+
+  // Admin-Panel anzeigen falls aktiviert
+  if(isAdmin()){
+    setTimeout(showAdminPanel,500);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
