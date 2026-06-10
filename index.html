@@ -2080,6 +2080,7 @@ function renderStats(){
         <div class="pill">📚 ${done}/${LESSONS.length} lecții</div>
         ${streak>0?`<div class="pill">🔥 ${streak} ${streak===1?'zi':'zile'}</div>`:''}
         <button class="pill theme-btn" onclick="toggleTheme()" aria-label="Mod luminos / întunecat">${getTheme()==='dark'?'☀️':'🌙'}</button>
+        <button class="pill" onclick="isAdmin()?showAdminPanel():showAdminLogin()" style="font-size:14px;" aria-label="Admin">${isAdmin()?'👨‍💻':'⚙️'}</button>
       </div>
     </div>
     <div class="stat-hero">
