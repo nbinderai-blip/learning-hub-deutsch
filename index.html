@@ -1677,6 +1677,10 @@ function showAdminLogin(){
     const code=document.getElementById('admin-code').value;
     if(code==='NORBERT2026'){
       setAdmin(true);
+      // Auto-create admin profile if not exists
+      if(!loadProfile()){
+        saveProfile({name:'Norbert',place:'Admin',date:null,createdAt:new Date().toISOString()});
+      }
       document.getElementById('admin-overlay').remove();
       showAdminPanel();
       toast('✅ Admin mode activat!');
@@ -2358,8 +2362,8 @@ function init() {
   const validTab=(savedTab&&COURSES[savedTab])?savedTab:'de';
   setTab(validTab);
 
-  // Prüfe Onboarding — nur beim ersten Start
-  if(!loadProfile()){
+  // Prüfe Onboarding — nur wenn kein Profil und kein Admin
+  if(!loadProfile() && !isAdmin()){
     showOnboarding();
   }
 
