@@ -1939,7 +1939,7 @@ function courseHdr(cid){
       <div class="pill">📚 ${done}/${list.length}</div>
       ${streak>0?`<div class="pill">🔥 ${streak} ${streak===1?'zi':'zile'}</div>`:''}
       <button class="pill theme-btn" onclick="toggleTheme()" aria-label="Mod luminos / întunecat">${getTheme()==='dark'?'☀️':'🌙'}</button>
-      ${!isAdmin()?`<button class="pill" onclick="showAdminLogin()" style="font-size:10px;padding:4px 8px;opacity:.5;">⚙️</button>`:''}
+      <button class="pill" onclick="isAdmin()?showAdminPanel():showAdminLogin()" style="font-size:14px;" aria-label="Admin">${isAdmin()?'👨‍💻':'⚙️'}</button>
     </div>
   </div>`;
 }
