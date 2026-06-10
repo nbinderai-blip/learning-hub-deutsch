@@ -1598,7 +1598,13 @@ function saveProfile(p){localStorage.setItem('dl4ro_profile',JSON.stringify(p));
 function isAdmin(){return localStorage.getItem('dl4ro_admin')==='true';}
 function setAdmin(v){localStorage.setItem('dl4ro_admin',v?'true':'false');}
 function getLevel(){return localStorage.getItem('dl4ro_level')||'A1';}
-function setLevel(l){localStorage.setItem('dl4ro_level',l);}
+function setLevel(l){
+  localStorage.setItem('dl4ro_level',l);
+  updateTabButtons(); // Update tab buttons based on new level
+  // Update ALL screens when level changes
+  if(ST.screen==='home') renderHome();
+  else if(ST.tab==='selectarii') renderStats();
+}
 function getLessonsForLevel(level){
   const ranges={A1:[1,8],A2:[9,15],B1:[16,99]};
   const [min,max]=ranges[level]||[1,15];
@@ -1872,12 +1878,26 @@ function courseLessons(cid){
   };
   return LESSONS.filter(l=>courseOf(l.id)===cid&&isInRange(l.id,level));
 }
+function updateTabButtons(){
+  // Disable tabs that have no lessons for current level
+  const tabs=['de','beruf','fs','en'];
+  tabs.forEach(cid=>{
+    const btn=document.getElementById('tb-'+cid);
+    if(!btn)return;
+    const hasLessons=courseLessons(cid).length>0;
+    btn.style.opacity=hasLessons?'1':'0.3';
+    btn.style.pointerEvents=hasLessons?'auto':'none';
+    btn.style.cursor=hasLessons?'pointer':'not-allowed';
+  });
+}
+
 function setTab(t){
   ST.tab=t; localStorage.setItem('dl4ro_tab',t);
   document.body.dataset.tab=t;
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   const btn=document.getElementById('tb-'+t); if(btn)btn.classList.add('active');
   go('home');
+  updateTabButtons();
 }
 
 // ════════════════════════════════════════════════════
@@ -2138,15 +2158,15 @@ function renderStats(){
       <div class="sect-hdr">📚 Nivel de curs — Selectează dificultatea</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;padding:8px 0;">
         <label style="flex:1;min-width:90px;cursor:pointer;padding:8px;border-radius:8px;background:${getLevel()==='A1'?'var(--acc)':'var(--bdr)'};color:${getLevel()==='A1'?'white':'inherit'}">
-          <input type="radio" name="level" value="A1" ${getLevel()==='A1'?'checked':''} onchange="setLevel('A1');renderStats()" style="margin-right:4px;">
+          <input type="radio" name="level" value="A1" ${getLevel()==='A1'?'checked':''} onchange="setLevel('A1')" style="margin-right:4px;">
           🌱 A1 (Începător)
         </label>
         <label style="flex:1;min-width:90px;cursor:pointer;padding:8px;border-radius:8px;background:${getLevel()==='A2'?'var(--acc)':'var(--bdr)'};color:${getLevel()==='A2'?'white':'inherit'}">
-          <input type="radio" name="level" value="A2" ${getLevel()==='A2'?'checked':''} onchange="setLevel('A2');renderStats()" style="margin-right:4px;">
+          <input type="radio" name="level" value="A2" ${getLevel()==='A2'?'checked':''} onchange="setLevel('A2')" style="margin-right:4px;">
           🌿 A2 (Elementar)
         </label>
         <label style="flex:1;min-width:90px;cursor:pointer;padding:8px;border-radius:8px;background:${getLevel()==='B1'?'var(--acc)':'var(--bdr)'};color:${getLevel()==='B1'?'white':'inherit'}">
-          <input type="radio" name="level" value="B1" ${getLevel()==='B1'?'checked':''} onchange="setLevel('B1');renderStats()" style="margin-right:4px;">
+          <input type="radio" name="level" value="B1" ${getLevel()==='B1'?'checked':''} onchange="setLevel('B1')" style="margin-right:4px;">
           🌳 B1 (Mediu)
         </label>
       </div>
