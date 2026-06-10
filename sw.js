@@ -1,7 +1,7 @@
 // Service Worker — Deutsch für Rumänen
 // Strategie: stale-while-revalidate — App lädt sofort aus dem Cache (auch offline),
 // holt im Hintergrund Updates für den nächsten Start.
-const CACHE = 'dl4ro-v13';
+const CACHE = 'dl4ro-v14';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

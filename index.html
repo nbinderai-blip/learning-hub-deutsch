@@ -1918,7 +1918,9 @@ function ringSvg(pct){
 }
 
 function courseHdr(cid){
-  const c=COURSES[cid], list=courseLessons(cid);
+  const c=COURSES[cid];
+  if(!c)return '';
+  const list=courseLessons(cid);
   const done=list.filter(l=>getLP(l.id).done).length;
   const pct=Math.round(done/list.length*100);
   const streak=getStreak(), xp=totalXP();
