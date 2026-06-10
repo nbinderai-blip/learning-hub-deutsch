@@ -2365,9 +2365,16 @@ function init() {
   const validTab=(savedTab&&COURSES[savedTab])?savedTab:'de';
   setTab(validTab);
 
-  // Prüfe Onboarding — nur wenn kein Profil und kein Admin
+  // Auto-activate admin mode on first load (für Testing)
   if(!loadProfile() && !isAdmin()){
-    showOnboarding();
+    // Überprüfe URL für ?admin Parameter
+    const params=new URLSearchParams(window.location.search);
+    if(params.has('admin')){
+      setAdmin(true);
+      saveProfile({name:'Norbert',place:'Admin',date:null,createdAt:new Date().toISOString()});
+    } else {
+      showOnboarding();
+    }
   }
 
   // Admin-Panel anzeigen falls aktiviert
