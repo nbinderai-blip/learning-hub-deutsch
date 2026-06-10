@@ -1597,6 +1597,13 @@ function loadProfile(){try{return JSON.parse(localStorage.getItem('dl4ro_profile
 function saveProfile(p){localStorage.setItem('dl4ro_profile',JSON.stringify(p));}
 function isAdmin(){return localStorage.getItem('dl4ro_admin')==='true';}
 function setAdmin(v){localStorage.setItem('dl4ro_admin',v?'true':'false');}
+function getLevel(){return localStorage.getItem('dl4ro_level')||'A1';}
+function setLevel(l){localStorage.setItem('dl4ro_level',l);}
+function getLessonsForLevel(level){
+  const ranges={A1:[1,8],A2:[9,15],B1:[16,99]};
+  const [min,max]=ranges[level]||[1,15];
+  return LESSONS.filter(l=>l.id>=min&&l.id<=max);
+}
 
 function getTheme(){
   return localStorage.getItem('dl4ro_theme')||((window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');
@@ -1634,6 +1641,23 @@ function showOnboarding(){
           <label>Data nașterii</label>
           <input type="date" id="onb-date">
         </div>
+        <div class="form-group">
+          <label>Selectează nivelul tău *</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <label style="flex:1;min-width:80px;cursor:pointer;">
+              <input type="radio" name="level" value="A1" checked style="margin-right:4px;">
+              <span>🌱 A1 (Complet începător)</span>
+            </label>
+            <label style="flex:1;min-width:80px;cursor:pointer;">
+              <input type="radio" name="level" value="A2" style="margin-right:4px;">
+              <span>🌿 A2 (Am o bază)</span>
+            </label>
+            <label style="flex:1;min-width:80px;cursor:pointer;">
+              <input type="radio" name="level" value="B1" style="margin-right:4px;">
+              <span>🌳 B1 (Vreau să perfectionez)</span>
+            </label>
+          </div>
+        </div>
         <div class="form-btns">
           <button type="submit" class="form-btn pri">Continuă →</button>
         </div>
@@ -1646,10 +1670,12 @@ function showOnboarding(){
     const name=document.getElementById('onb-name').value.trim();
     const place=document.getElementById('onb-place').value.trim();
     const date=document.getElementById('onb-date').value||null;
+    const level=document.querySelector('input[name="level"]:checked').value;
     if(!name||!place){toast('⚠️ Completează Nome și Loc!');return;}
     saveProfile({name,place,date,createdAt:new Date().toISOString()});
+    setLevel(level);
     document.getElementById('onb-overlay').remove();
-    renderHome(); // Refresh cu salut personalizat
+    renderHome();
   });
 }
 
@@ -1836,7 +1862,12 @@ const COURSES={
   selectarii:{name:'Selectări',de:'Einstellungen',eyebrow:'Setări și Statistici',sub:'Voce, viteză, statistici de progres și realizări',speech:'de-DE',hdr:'hdr-stats'},
 };
 function courseOf(id){return id>=201&&id<300?'beruf':id>=101?'en':id>=18?'fs':'de';}
-function courseLessons(cid){return LESSONS.filter(l=>courseOf(l.id)===cid);}
+function courseLessons(cid){
+  const level=getLevel();
+  const ranges={A1:[1,8],A2:[9,15],B1:[16,99]};
+  const [min,max]=ranges[level]||[1,15];
+  return LESSONS.filter(l=>courseOf(l.id)===cid&&l.id>=min&&l.id<=max);
+}
 function setTab(t){
   ST.tab=t; localStorage.setItem('dl4ro_tab',t);
   document.body.dataset.tab=t;
@@ -2098,6 +2129,23 @@ function renderStats(){
         <div class="cc-sub">Învață zilnic ca să crească!</div>
       </div>
       <div class="cc-val" style="color:var(--fs1)">${streak} ${streak===1?'zi':'zile'}</div>
+    </div>
+    <div class="zeit-card" style="margin-top:10px">
+      <div class="sect-hdr">📚 Nivel de curs — Selectează dificultatea</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;padding:8px 0;">
+        <label style="flex:1;min-width:90px;cursor:pointer;padding:8px;border-radius:8px;background:${getLevel()==='A1'?'var(--acc)':'var(--bdr)'};color:${getLevel()==='A1'?'white':'inherit'}">
+          <input type="radio" name="level" value="A1" ${getLevel()==='A1'?'checked':''} onchange="setLevel('A1');renderStats()" style="margin-right:4px;">
+          🌱 A1 (Începător)
+        </label>
+        <label style="flex:1;min-width:90px;cursor:pointer;padding:8px;border-radius:8px;background:${getLevel()==='A2'?'var(--acc)':'var(--bdr)'};color:${getLevel()==='A2'?'white':'inherit'}">
+          <input type="radio" name="level" value="A2" ${getLevel()==='A2'?'checked':''} onchange="setLevel('A2');renderStats()" style="margin-right:4px;">
+          🌿 A2 (Elementar)
+        </label>
+        <label style="flex:1;min-width:90px;cursor:pointer;padding:8px;border-radius:8px;background:${getLevel()==='B1'?'var(--acc)':'var(--bdr)'};color:${getLevel()==='B1'?'white':'inherit'}">
+          <input type="radio" name="level" value="B1" ${getLevel()==='B1'?'checked':''} onchange="setLevel('B1');renderStats()" style="margin-right:4px;">
+          🌳 B1 (Mediu)
+        </label>
+      </div>
     </div>
     <div class="zeit-card" style="margin-top:10px">
       <div class="sect-hdr">🔊 Setări audio — voce și viteză</div>
