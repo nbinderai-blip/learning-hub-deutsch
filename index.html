@@ -1861,12 +1861,16 @@ const COURSES={
   en:{name:'Engleză',de:'Englisch',eyebrow:'Curs Gratuit · A1',sub:'De la zero — saluturi, numere, culori, familie și expresii zilnice',speech:'en-GB',hdr:'hdr-en'},
   selectarii:{name:'Selectări',de:'Einstellungen',eyebrow:'Setări și Statistici',sub:'Voce, viteză, statistici de progres și realizări',speech:'de-DE',hdr:'hdr-stats'},
 };
-function courseOf(id){return id>=201&&id<300?'beruf':id>=101?'en':id>=18?'fs':'de';}
+function courseOf(id){return id>=301?'de':id>=201&&id<300?'beruf':id>=101?'en':id>=18?'fs':'de';}
 function courseLessons(cid){
   const level=getLevel();
-  const ranges={A1:[1,8],A2:[9,15],B1:[16,99]};
-  const [min,max]=ranges[level]||[1,15];
-  return LESSONS.filter(l=>courseOf(l.id)===cid&&l.id>=min&&l.id<=max);
+  const isInRange=(id,level)=>{
+    if(level==='A1') return id>=1&&id<=8;
+    if(level==='A2') return id>=9&&id<=15;
+    if(level==='B1') return (id>=16&&id<=17)||(id>=18&&id<=22)||(id>=101&&id<=108)||(id>=201&&id<=206)||(id>=301&&id<=305);
+    return true;
+  };
+  return LESSONS.filter(l=>courseOf(l.id)===cid&&isInRange(l.id,level));
 }
 function setTab(t){
   ST.tab=t; localStorage.setItem('dl4ro_tab',t);
