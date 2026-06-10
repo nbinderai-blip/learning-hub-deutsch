@@ -1730,7 +1730,7 @@ function showAdminPanel(){
     <button class="admin-btn" onclick="unlockAllLessons()">🔓 Deblochează tot</button>
     <button class="admin-btn" onclick="ST.prog={};saveProg();renderHome();toast('✅ Reset progres!')">🔄 Reset progres</button>
     <button class="admin-btn" onclick="showAdminStats()">📊 Statistici</button>
-    <button class="admin-btn" onclick="setAdmin(false);document.getElementById('admin-panel').remove();toast('👋 Admin deactivat')">❌ Deconectare</button>
+    <button class="admin-btn" onclick="setAdmin(false);document.getElementById('admin-panel').remove();renderHome();toast('👋 Admin deactivat')">❌ Deconectare</button>
   </div>`;
   const existing=document.getElementById('admin-panel');
   if(existing)existing.remove();
